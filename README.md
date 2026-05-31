@@ -33,8 +33,8 @@ Staff are shown a realistic situation and a mix of **correct and wrong response 
 5. **See your results** — score, full review, and a key takeaway at the end
 
 ### Scoring
-- ✅ Correct answer → **+10 points**
-- ❌ Wrong answer → **−5 points**
+-  Correct answer → **+10 points**
+-  Wrong answer → **−5 points**
 - Maximum score per drill: **30 points**
 
 ---
