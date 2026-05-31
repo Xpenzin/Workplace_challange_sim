@@ -1,6 +1,6 @@
-# 🛡️ Incident Response Mini-Drill
+# Incident Response Mini-Drill
 
-An interactive staff training simulation for cybersecurity incident response — built as a single, self-contained HTML file with no dependencies or install required.
+An interactive staff training simulation for cybersecurity incident response — built as a single, self-contained HTML file with no dependencies or installation required.
 
 **[▶ Launch the drill](https://xpenzin.github.io/Workplace_challange_sim/)**
 
@@ -80,7 +80,7 @@ xdg-open index.html   # Linux
 
 ## Framework reference
 
-This simulation is built around the **Incident Response Mini-Drill SOP** which covers:
+This simulation is built around the **Incident Response Mini-Drill SOP**, which covers:
 
 1. Scenario presentation
 2. Staff immediate response
