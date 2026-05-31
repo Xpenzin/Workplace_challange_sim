@@ -3,934 +3,945 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Incident Response Mini-Drill</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" />
+  <title>Incident Response Drill</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
-    :root {
-      --bg-primary: #ffffff;
-      --bg-secondary: #f5f5f4;
-      --bg-tertiary: #eeece8;
-      --text-primary: #1a1a18;
-      --text-secondary: #6b6b66;
-      --border-light: rgba(0,0,0,0.10);
-      --border-mid: rgba(0,0,0,0.18);
-      --border-strong: rgba(0,0,0,0.28);
-      --radius-md: 8px;
-      --radius-lg: 12px;
-      --radius-xl: 16px;
-      --blue-50: #E6F1FB;
-      --blue-100: #B5D4F4;
-      --blue-600: #185FA5;
-      --blue-800: #0C447C;
-      --green-50: #E1F5EE;
-      --green-400: #1D9E75;
-      --green-600: #0F6E56;
-      --green-800: #085041;
-      --green-teal: #5DCAA5;
-      --red-50: #FCEBEB;
-      --red-400: #E24B4A;
-      --red-800: #791F1F;
-      --red-stroke: #F09595;
-      --amber-50: #FAEEDA;
-      --amber-600: #BA7517;
-      --amber-800: #633806;
-      --amber-stroke: #EF9F27;
-      --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg-primary: #1e1e1c;
-        --bg-secondary: #2a2a28;
-        --bg-tertiary: #333330;
-        --text-primary: #f0ede8;
-        --text-secondary: #999890;
-        --border-light: rgba(255,255,255,0.10);
-        --border-mid: rgba(255,255,255,0.18);
-        --border-strong: rgba(255,255,255,0.28);
-        --blue-50: #042C53;
-        --blue-100: #0C447C;
-        --blue-600: #85B7EB;
-        --blue-800: #B5D4F4;
-        --green-50: #04342C;
-        --green-400: #5DCAA5;
-        --green-600: #9FE1CB;
-        --green-800: #E1F5EE;
-        --green-teal: #1D9E75;
-        --red-50: #501313;
-        --red-400: #F09595;
-        --red-800: #FCEBEB;
-        --red-stroke: #A32D2D;
-        --amber-50: #412402;
-        --amber-600: #FAC775;
-        --amber-800: #FAEEDA;
-        --amber-stroke: #854F0B;
-      }
-    }
-
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+    :root {
+      --ink:       #1C1810;
+      --ink-mid:   #5A4F42;
+      --ink-soft:  #8C7E70;
+      --paper:     #FAF6F0;
+      --paper-2:   #F0EBE1;
+      --paper-3:   #E5DDD2;
+      --accent:    #C94A1A;
+      --accent-2:  #2D6A4F;
+      --accent-3:  #1A4F8A;
+      --warn:      #B5400A;
+      --radius:    10px;
+      --radius-lg: 16px;
+      --font-body: 'DM Sans', sans-serif;
+      --font-head: 'DM Serif Display', serif;
+    }
+
     body {
-      font-family: var(--font);
-      background: var(--bg-tertiary);
-      color: var(--text-primary);
+      font-family: var(--font-body);
+      background: var(--paper);
+      color: var(--ink);
       min-height: 100vh;
-      padding: 2rem 1rem;
+      padding: 2rem 1rem 4rem;
     }
 
-    .shell {
-      max-width: 740px;
+    /* ── Layout ── */
+    .wrap {
+      max-width: 680px;
       margin: 0 auto;
-      background: var(--bg-primary);
-      border-radius: var(--radius-xl);
-      border: 0.5px solid var(--border-light);
-      padding: 2rem 2rem 2.5rem;
     }
 
-    /* ── Header ── */
-    .drill-header {
+    /* ── Top bar ── */
+    .topbar {
       display: flex;
-      align-items: flex-start;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2.5rem;
+    }
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .shield {
+      width: 36px; height: 36px;
+      background: var(--ink);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .shield svg { width: 18px; height: 18px; fill: var(--paper); }
+    .brand { font-family: var(--font-head); font-size: 18px; color: var(--ink); }
+    .score-pill {
+      font-size: 13px;
+      font-weight: 600;
+      padding: 5px 14px;
+      border-radius: 99px;
+      background: var(--ink);
+      color: var(--paper);
+      display: none;
+    }
+
+    /* ── Screen management ── */
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    /* ── Home screen ── */
+    .home-hero {
+      margin-bottom: 2rem;
+    }
+    .home-eyebrow {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+    .home-title {
+      font-family: var(--font-head);
+      font-size: 38px;
+      line-height: 1.1;
+      color: var(--ink);
+      margin-bottom: 12px;
+    }
+    .home-title em { font-style: italic; color: var(--accent); }
+    .home-sub {
+      font-size: 15px;
+      color: var(--ink-mid);
+      line-height: 1.6;
+      max-width: 480px;
+    }
+
+    /* ── Scenario cards ── */
+    .scenario-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: 12px;
+    }
+    .scenario-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
       gap: 12px;
       margin-bottom: 2rem;
-      padding-bottom: 1.25rem;
-      border-bottom: 0.5px solid var(--border-light);
     }
-    .header-icon {
-      width: 44px; height: 44px;
-      border-radius: var(--radius-md);
-      background: var(--blue-50);
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
+    .sc-card {
+      background: var(--paper-2);
+      border: 1.5px solid var(--paper-3);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+      cursor: pointer;
+      transition: border-color 0.15s, transform 0.12s;
+      position: relative;
+      overflow: hidden;
     }
-    .header-icon i { font-size: 22px; color: var(--blue-600); }
-    .header-text h1 { font-size: 20px; font-weight: 600; color: var(--text-primary); }
-    .header-text p  { font-size: 13px; color: var(--text-secondary); margin-top: 3px; }
-    .sop-badge {
-      margin-left: auto;
-      background: var(--blue-50);
-      color: var(--blue-600);
+    .sc-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 4px; height: 100%;
+      background: var(--paper-3);
+      transition: background 0.15s;
+    }
+    .sc-card:hover { border-color: var(--ink-soft); transform: translateY(-2px); }
+    .sc-card:hover::before { background: var(--ink-soft); }
+    .sc-card.active { border-color: var(--ink); }
+    .sc-card.active::before { background: var(--accent); }
+    .sc-icon {
+      font-size: 26px;
+      margin-bottom: 10px;
+      display: block;
+    }
+    .sc-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+    .sc-tag {
       font-size: 11px;
+      color: var(--ink-soft);
+    }
+
+    /* ── Prompt reveal ── */
+    .prompt-box {
+      background: var(--ink);
+      border-radius: var(--radius-lg);
+      padding: 20px 22px;
+      margin-bottom: 1.5rem;
+      display: none;
+    }
+    .prompt-box.visible { display: block; }
+    .prompt-kicker {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--paper-3);
+      margin-bottom: 8px;
+    }
+    .prompt-text {
+      font-size: 16px;
+      color: var(--paper);
+      line-height: 1.6;
+      font-family: var(--font-head);
+      font-style: italic;
+    }
+
+    .btn-start {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius);
+      padding: 13px 28px;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: var(--font-body);
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+    }
+    .btn-start.visible { display: flex; }
+    .btn-start:hover { background: var(--warn); }
+    .btn-start:active { transform: scale(0.98); }
+
+    /* ── Drill screen ── */
+    .drill-header {
+      margin-bottom: 1.75rem;
+    }
+    .drill-eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: 6px;
+    }
+    .drill-title {
+      font-family: var(--font-head);
+      font-size: 26px;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+    .drill-prompt {
+      font-size: 14px;
+      color: var(--ink-mid);
+      line-height: 1.55;
+      background: var(--paper-2);
+      border-left: 3px solid var(--accent);
+      padding: 10px 14px;
+      border-radius: 0 var(--radius) var(--radius) 0;
+    }
+
+    /* ── Progress bar ── */
+    .progress-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 1.5rem;
+    }
+    .progress-bg {
+      flex: 1;
+      height: 5px;
+      background: var(--paper-3);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--accent-2);
+      border-radius: 99px;
+      transition: width 0.4s ease;
+    }
+    .progress-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ink-soft);
+      white-space: nowrap;
+    }
+
+    /* ── Score live ── */
+    .live-score {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 1.5rem;
+    }
+    .ls-box {
+      flex: 1;
+      background: var(--paper-2);
+      border: 1px solid var(--paper-3);
+      border-radius: var(--radius);
+      padding: 10px 14px;
+      text-align: center;
+    }
+    .ls-val {
+      font-family: var(--font-head);
+      font-size: 22px;
+      color: var(--ink);
+    }
+    .ls-val.green { color: var(--accent-2); }
+    .ls-val.red   { color: var(--accent); }
+    .ls-key {
+      font-size: 10px;
       font-weight: 600;
       letter-spacing: 0.06em;
       text-transform: uppercase;
-      padding: 5px 12px;
-      border-radius: 99px;
-      white-space: nowrap;
-      align-self: center;
+      color: var(--ink-soft);
+      margin-top: 2px;
     }
 
-    /* ── Section label ── */
-    .section-label {
+    /* ── Options ── */
+    .options-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ink-soft);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      margin-bottom: 1.5rem;
+    }
+    .opt {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 13px 15px;
+      border-radius: var(--radius);
+      border: 1.5px solid var(--paper-3);
+      background: var(--paper-2);
+      cursor: pointer;
+      transition: border-color 0.12s, background 0.12s;
+      user-select: none;
+    }
+    .opt:hover:not(.locked) {
+      border-color: var(--ink-soft);
+      background: var(--paper-3);
+    }
+    .opt.locked { cursor: default; }
+    .opt.correct {
+      border-color: var(--accent-2);
+      background: #edf7f1;
+    }
+    .opt.wrong {
+      border-color: var(--accent);
+      background: #fdf0eb;
+    }
+    .opt.missed {
+      border-color: var(--ink-soft);
+      background: var(--paper-2);
+      opacity: 0.6;
+    }
+    .opt-dot {
+      width: 20px; height: 20px;
+      min-width: 20px;
+      border-radius: 50%;
+      border: 2px solid var(--paper-3);
+      background: var(--paper);
+      display: flex; align-items: center; justify-content: center;
+      margin-top: 1px;
+      font-size: 11px;
+      font-weight: 700;
+      transition: all 0.12s;
+    }
+    .opt.correct .opt-dot { background: var(--accent-2); border-color: var(--accent-2); color: #fff; }
+    .opt.wrong   .opt-dot { background: var(--accent);   border-color: var(--accent);   color: #fff; }
+    .opt.missed  .opt-dot { background: var(--ink-soft); border-color: var(--ink-soft); color: #fff; }
+    .opt-text {
+      font-size: 14px;
+      color: var(--ink);
+      line-height: 1.5;
+    }
+    .opt.correct .opt-text { color: #1a4a30; }
+    .opt.wrong   .opt-text { color: #7a2010; }
+
+    /* ── Feedback toast ── */
+    .feedback {
+      border-radius: var(--radius);
+      padding: 11px 14px;
+      font-size: 13px;
+      line-height: 1.5;
+      margin-bottom: 1rem;
+      display: none;
+    }
+    .feedback.visible { display: block; }
+    .feedback.good { background: #edf7f1; color: #1a4a30; border: 1px solid #b4ddc7; }
+    .feedback.bad  { background: #fdf0eb; color: #7a2010; border: 1px solid #f4b8a0; }
+
+    /* ── Nav buttons ── */
+    .nav-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 11px 22px;
+      border-radius: var(--radius);
+      font-size: 14px;
+      font-weight: 600;
+      font-family: var(--font-body);
+      cursor: pointer;
+      transition: background 0.12s, transform 0.1s;
+      border: none;
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn-ink  { background: var(--ink); color: var(--paper); }
+    .btn-ink:hover { background: #2e2820; }
+    .btn-ghost { background: var(--paper-3); color: var(--ink); }
+    .btn-ghost:hover { background: var(--paper-3); filter: brightness(0.95); }
+    .btn-green { background: var(--accent-2); color: #fff; }
+    .btn-green:hover { background: #245a42; }
+
+    /* ── Results screen ── */
+    .result-hero {
+      text-align: center;
+      padding: 2rem 0 1.5rem;
+    }
+    .result-ring-wrap {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+    .result-title {
+      font-family: var(--font-head);
+      font-size: 30px;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+    .result-sub {
+      font-size: 15px;
+      color: var(--ink-mid);
+    }
+
+    .result-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin: 1.5rem 0;
+    }
+    .stat-box {
+      background: var(--paper-2);
+      border: 1px solid var(--paper-3);
+      border-radius: var(--radius);
+      padding: 14px 10px;
+      text-align: center;
+    }
+    .stat-val {
+      font-family: var(--font-head);
+      font-size: 28px;
+      color: var(--ink);
+    }
+    .stat-key {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-top: 3px;
+    }
+
+    .result-breakdown {
+      margin-bottom: 1.5rem;
+    }
+    .breakdown-label {
       font-size: 11px;
       font-weight: 600;
       letter-spacing: 0.07em;
       text-transform: uppercase;
-      color: var(--text-secondary);
-      margin-bottom: 12px;
+      color: var(--ink-soft);
+      margin-bottom: 10px;
+    }
+    .breakdown-row {
       display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .section-label i { font-size: 14px; }
-
-    /* ── Scenario grid ── */
-    .scenario-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+      align-items: flex-start;
       gap: 10px;
-      margin-bottom: 1.25rem;
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      line-height: 1.4;
+      margin-bottom: 7px;
     }
-    .scenario-card {
-      background: var(--bg-primary);
-      border: 0.5px solid var(--border-light);
-      border-radius: var(--radius-lg);
-      padding: 14px;
-      cursor: pointer;
-      transition: border-color 0.15s, background 0.15s;
+    .breakdown-row.c { background: #edf7f1; color: #1a4a30; }
+    .breakdown-row.w { background: #fdf0eb; color: #7a2010; }
+    .breakdown-dot {
+      width: 18px; height: 18px; min-width: 18px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
+      margin-top: 1px;
     }
-    .scenario-card:hover {
-      border-color: var(--border-mid);
-      background: var(--bg-secondary);
-    }
-    .scenario-card.active {
-      border: 2px solid var(--blue-600);
-      background: var(--blue-50);
-    }
-    .scenario-card.active .sc-label { color: var(--blue-800); }
-    .sc-icon { font-size: 24px; margin-bottom: 8px; display: block; }
-    .sc-label { font-size: 13px; font-weight: 600; color: var(--text-primary); line-height: 1.35; }
-    .sc-sub   { font-size: 11px; color: var(--text-secondary); margin-top: 3px; }
+    .breakdown-row.c .breakdown-dot { background: var(--accent-2); color: #fff; }
+    .breakdown-row.w .breakdown-dot { background: var(--accent);   color: #fff; }
 
-    /* ── Prompt box ── */
-    .scenario-prompt {
-      background: var(--bg-secondary);
-      border-radius: var(--radius-md);
-      padding: 14px 16px;
-      margin-bottom: 1.25rem;
-      border-left: 3px solid var(--blue-600);
-      display: none;
+    .tip-box {
+      background: var(--ink);
+      border-radius: var(--radius-lg);
+      padding: 18px 20px;
+      margin-bottom: 1.5rem;
     }
-    .scenario-prompt.visible { display: block; }
-    .prompt-kicker {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.05em;
+    .tip-kicker {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: var(--blue-600);
+      color: var(--paper-3);
       margin-bottom: 6px;
     }
-    .prompt-body { font-size: 15px; color: var(--text-primary); line-height: 1.6; }
-
-    /* ── Phase track ── */
-    .phase-track {
-      display: flex;
-      gap: 6px;
-      margin-bottom: 1.5rem;
-      flex-wrap: wrap;
-    }
-    .pip {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 5px 14px;
-      border-radius: 99px;
-      border: 0.5px solid var(--border-light);
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--text-secondary);
-      background: var(--bg-primary);
-      transition: all 0.2s;
-    }
-    .pip i { font-size: 13px; }
-    .pip.done    { background: var(--green-50); border-color: var(--green-teal); color: var(--green-600); }
-    .pip.current { background: var(--blue-600); border-color: var(--blue-600); color: #E6F1FB; }
-
-    /* ── Phase panels ── */
-    .phase-panel { display: none; }
-    .phase-panel.active { display: block; animation: fadeUp 0.2s ease; }
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(6px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ── Info note ── */
-    .info-note {
-      background: var(--amber-50);
-      border: 0.5px solid var(--amber-stroke);
-      border-radius: var(--radius-md);
-      padding: 11px 14px;
-      font-size: 13px;
-      color: var(--amber-800);
-      margin-bottom: 1.25rem;
-      display: flex;
-      gap: 10px;
-      align-items: flex-start;
-      line-height: 1.5;
-    }
-    .info-note i { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
-
-    /* ── Timer ── */
-    .timer-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 1.25rem;
-    }
-    .timer-bg {
-      flex: 1;
-      height: 6px;
-      background: var(--bg-secondary);
-      border-radius: 99px;
-      overflow: hidden;
-    }
-    .timer-fill {
-      height: 100%;
-      border-radius: 99px;
-      background: var(--green-400);
-      transition: width 1s linear, background 0.3s;
-    }
-    .timer-txt {
-      font-size: 13px;
-      color: var(--text-secondary);
-      min-width: 38px;
-      text-align: right;
-      font-variant-numeric: tabular-nums;
-    }
-    .timer-toggle {
-      font-size: 13px;
-      padding: 5px 12px;
-      border-radius: var(--radius-md);
-      border: 0.5px solid var(--border-mid);
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      cursor: pointer;
-      font-family: var(--font);
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      transition: background 0.15s;
-    }
-    .timer-toggle:hover { background: var(--bg-secondary); }
-
-    /* ── Checklist ── */
-    .checklist { display: flex; flex-direction: column; gap: 8px; margin-bottom: 1.25rem; }
-    .check-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      padding: 12px 14px;
-      border-radius: var(--radius-md);
-      border: 0.5px solid var(--border-light);
-      background: var(--bg-primary);
-      cursor: pointer;
-      transition: all 0.15s;
-      user-select: none;
-    }
-    .check-item:hover { border-color: var(--border-mid); }
-    .check-item.checked { background: var(--green-50); border-color: var(--green-teal); }
-    .check-item.missed  { background: var(--red-50);   border-color: var(--red-stroke); }
-    .check-box {
-      width: 20px; height: 20px; min-width: 20px;
-      border-radius: 4px;
-      border: 0.5px solid var(--border-mid);
-      background: var(--bg-secondary);
-      display: flex; align-items: center; justify-content: center;
-      margin-top: 1px;
-      transition: all 0.15s;
-    }
-    .check-item.checked .check-box { background: var(--green-400); border-color: var(--green-400); }
-    .check-item.missed  .check-box { background: var(--red-400);   border-color: var(--red-400); }
-    .check-box i { font-size: 13px; color: #fff; display: none; }
-    .check-item.checked .check-box i,
-    .check-item.missed  .check-box i { display: block; }
-    .check-label { font-size: 14px; color: var(--text-primary); line-height: 1.5; }
-    .check-item.checked .check-label { color: var(--green-800); }
-    .check-item.missed  .check-label { color: var(--red-800); }
-
-    /* ── Score card ── */
-    .score-card {
-      background: var(--bg-secondary);
-      border-radius: var(--radius-lg);
-      padding: 1.25rem 1.5rem;
-      margin-bottom: 1.25rem;
-      display: flex;
-      align-items: center;
-      gap: 1.25rem;
-    }
-    .score-ring { width: 68px; height: 68px; flex-shrink: 0; }
-    .score-info h3 { font-size: 16px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
-    .score-info p  { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
-
-    /* ── Review list ── */
-    .review-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 1.25rem; }
-    .review-row {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      padding: 11px 14px;
-      border-radius: var(--radius-md);
+    .tip-text {
       font-size: 14px;
-      line-height: 1.45;
+      color: var(--paper);
+      line-height: 1.6;
     }
-    .review-row.correct { background: var(--green-50); color: var(--green-800); border: 0.5px solid var(--green-teal); }
-    .review-row.wrong   { background: var(--red-50);   color: var(--red-800);   border: 0.5px solid var(--red-stroke); }
-    .review-row i { font-size: 17px; margin-top: 1px; flex-shrink: 0; }
-
-    /* ── Policy tags ── */
-    .policy-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1.25rem; }
-    .ptag {
-      font-size: 12px;
-      font-weight: 500;
-      padding: 5px 13px;
-      border-radius: 99px;
-      border: 0.5px solid var(--border-mid);
-      color: var(--text-secondary);
-      background: var(--bg-primary);
-    }
-
-    /* ── Doc form ── */
-    .doc-form { display: flex; flex-direction: column; gap: 14px; margin-bottom: 1.5rem; }
-    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-    @media (max-width: 500px) { .field-row { grid-template-columns: 1fr; } }
-    .field {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-    }
-    .field label {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--text-secondary);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    .field input[type="text"],
-    .field textarea {
-      font-size: 14px;
-      border-radius: var(--radius-md);
-      border: 0.5px solid var(--border-mid);
-      padding: 10px 12px;
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      font-family: var(--font);
-      line-height: 1.5;
-      transition: border-color 0.15s;
-      width: 100%;
-    }
-    .field input[type="text"]:focus,
-    .field textarea:focus {
-      outline: none;
-      border-color: var(--blue-600);
-    }
-    .field textarea { resize: vertical; min-height: 80px; }
-
-    /* ── Complete banner ── */
-    .complete-banner {
-      background: var(--green-50);
-      border: 0.5px solid var(--green-teal);
-      border-radius: var(--radius-lg);
-      padding: 1.25rem 1.5rem;
-      margin-bottom: 1.25rem;
-      display: none;
-    }
-    .complete-banner.visible { display: block; }
-    .complete-banner h2 { font-size: 17px; font-weight: 600; color: var(--green-800); margin-bottom: 5px; }
-    .complete-banner p  { font-size: 14px; color: var(--green-600); line-height: 1.5; }
-
-    /* ── Buttons ── */
-    .btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 0.5rem; }
-    .btn {
-      font-size: 14px;
-      font-weight: 500;
-      padding: 10px 22px;
-      border-radius: var(--radius-md);
-      border: 0.5px solid var(--border-mid);
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      cursor: pointer;
-      transition: background 0.15s, transform 0.1s;
-      font-family: var(--font);
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-    }
-    .btn:hover   { background: var(--bg-secondary); }
-    .btn:active  { transform: scale(0.98); }
-    .btn-blue  { background: var(--blue-600);  border-color: var(--blue-600);  color: #e6f1fb; }
-    .btn-blue:hover  { background: var(--blue-800); }
-    .btn-green { background: var(--green-600); border-color: var(--green-600); color: #e1f5ee; }
-    .btn-green:hover { background: var(--green-800); }
 
     /* ── Divider ── */
-    .divider { border: none; border-top: 0.5px solid var(--border-light); margin: 1.5rem 0; }
+    .divider {
+      border: none;
+      border-top: 1px solid var(--paper-3);
+      margin: 1.5rem 0;
+    }
 
     /* ── Responsive ── */
-    @media (max-width: 600px) {
-      .shell { padding: 1.25rem 1rem 2rem; border-radius: var(--radius-lg); }
-      body { padding: 1rem 0.5rem; }
-      .sop-badge { display: none; }
+    @media (max-width: 480px) {
+      .home-title { font-size: 28px; }
+      .scenario-grid { grid-template-columns: 1fr 1fr; }
+      .result-stats { grid-template-columns: repeat(3, 1fr); }
     }
   </style>
 </head>
 <body>
+<div class="wrap">
 
-<div class="shell">
-
-  <!-- Header -->
-  <div class="drill-header">
-    <div class="header-icon"><i class="ti ti-shield-check"></i></div>
-    <div class="header-text">
-      <h1>Incident Response Mini-Drill</h1>
-      <p>Staff training simulation &mdash; 5–10 minutes</p>
+  <!-- Top bar -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="shield">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L4 6v6c0 5.25 3.5 10.15 8 11.35C16.5 22.15 20 17.25 20 12V6l-8-4z"/></svg>
+      </div>
+      <span class="brand">IR Drill</span>
     </div>
-    <span class="sop-badge">SOP</span>
+    <div class="score-pill" id="score-pill">0 pts</div>
   </div>
 
-  <!-- Scenario Picker -->
-  <div id="step-picker">
-    <div class="section-label"><i class="ti ti-list"></i> Choose a scenario</div>
+  <!-- ══ HOME SCREEN ══ -->
+  <div class="screen active" id="screen-home">
+    <div class="home-hero">
+      <div class="home-eyebrow">Staff training &mdash; 5 min drill</div>
+      <h1 class="home-title">Know what to do<br>when it <em>matters.</em></h1>
+      <p class="home-sub">Pick a scenario below. You'll see a mix of correct and wrong actions — spot the right ones and learn why the others are a bad idea.</p>
+    </div>
+
+    <div class="scenario-label">Choose your scenario</div>
     <div class="scenario-grid">
-      <div class="scenario-card" onclick="pickScenario('login', this)">
-        <i class="ti ti-alert-triangle sc-icon" style="color:#BA7517"></i>
-        <div class="sc-label">Suspicious login alert</div>
-        <div class="sc-sub">Scenario A</div>
+      <div class="sc-card" onclick="pickScenario('login', this)">
+        <span class="sc-icon">⚠️</span>
+        <div class="sc-name">Suspicious login alert</div>
+        <div class="sc-tag">Account security</div>
       </div>
-      <div class="scenario-card" onclick="pickScenario('phishing', this)">
-        <i class="ti ti-fish sc-icon" style="color:#993556"></i>
-        <div class="sc-label">Phishing link clicked</div>
-        <div class="sc-sub">Scenario D</div>
+      <div class="sc-card" onclick="pickScenario('phishing', this)">
+        <span class="sc-icon">🎣</span>
+        <div class="sc-name">Phishing link clicked</div>
+        <div class="sc-tag">Email threat</div>
       </div>
-      <div class="scenario-card" onclick="pickScenario('device', this)">
-        <i class="ti ti-device-laptop-off sc-icon" style="color:#A32D2D"></i>
-        <div class="sc-label">Lost or stolen device</div>
-        <div class="sc-sub">Scenario B</div>
-      </div>
-      <div class="scenario-card" onclick="pickScenario('malware', this)">
-        <i class="ti ti-bug sc-icon" style="color:#534AB7"></i>
-        <div class="sc-label">Suspicious pop-up / malware</div>
-        <div class="sc-sub">Scenario C</div>
+      <div class="sc-card" onclick="pickScenario('device', this)">
+        <span class="sc-icon">💻</span>
+        <div class="sc-name">Lost or stolen device</div>
+        <div class="sc-tag">Physical security</div>
       </div>
     </div>
 
-    <div class="scenario-prompt" id="scenario-prompt">
-      <div class="prompt-kicker"><i class="ti ti-clipboard-text"></i> Scenario prompt</div>
-      <div class="prompt-body" id="prompt-text"></div>
+    <div class="prompt-box" id="home-prompt">
+      <div class="prompt-kicker">The situation</div>
+      <div class="prompt-text" id="home-prompt-text"></div>
     </div>
 
-    <div class="btn-row" id="start-row" style="display:none">
-      <button class="btn btn-blue" onclick="startDrill()">Start drill <i class="ti ti-arrow-right"></i></button>
+    <button class="btn-start" id="btn-start" onclick="startDrill()">
+      Start drill
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </button>
+  </div>
+
+  <!-- ══ DRILL SCREEN ══ -->
+  <div class="screen" id="screen-drill">
+    <div class="drill-header">
+      <div class="drill-eyebrow" id="drill-eyebrow"></div>
+      <div class="drill-title" id="drill-title"></div>
+      <div class="drill-prompt" id="drill-prompt"></div>
+    </div>
+
+    <div class="progress-row">
+      <div class="progress-bg"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+      <div class="progress-label" id="progress-label">0 / 0</div>
+    </div>
+
+    <div class="live-score">
+      <div class="ls-box">
+        <div class="ls-val green" id="ls-correct">0</div>
+        <div class="ls-key">Correct</div>
+      </div>
+      <div class="ls-box">
+        <div class="ls-val red" id="ls-wrong">0</div>
+        <div class="ls-key">Wrong</div>
+      </div>
+      <div class="ls-box">
+        <div class="ls-val" id="ls-score">0</div>
+        <div class="ls-key">Points</div>
+      </div>
+    </div>
+
+    <div class="options-label">What should you do?</div>
+    <div class="feedback" id="feedback"></div>
+    <div class="options-list" id="options-list"></div>
+
+    <div class="nav-row" id="nav-row" style="display:none">
+      <button class="btn btn-ink" id="btn-next" onclick="nextStep()">Next step →</button>
     </div>
   </div>
 
-  <!-- Phase Track -->
-  <div class="phase-track" id="phase-track" style="display:none">
-    <div class="pip" id="pip-0"><i class="ti ti-player-play"></i> Respond</div>
-    <div class="pip" id="pip-1"><i class="ti ti-checklist"></i> Review</div>
-    <div class="pip" id="pip-2"><i class="ti ti-book"></i> Policy</div>
-    <div class="pip" id="pip-3"><i class="ti ti-file-description"></i> Document</div>
-  </div>
+  <!-- ══ RESULTS SCREEN ══ -->
+  <div class="screen" id="screen-results">
+    <div class="result-hero">
+      <div class="result-ring-wrap">
+        <svg width="110" height="110" viewBox="0 0 110 110" id="result-ring">
+          <circle cx="55" cy="55" r="44" fill="none" stroke="#e5ddd2" stroke-width="8"/>
+          <circle cx="55" cy="55" r="44" fill="none" stroke="#2D6A4F" stroke-width="8"
+            stroke-dasharray="0 999" stroke-linecap="round"
+            transform="rotate(-90 55 55)" id="ring-arc"/>
+          <text x="55" y="60" text-anchor="middle" font-size="20" font-weight="700"
+            fill="#1C1810" font-family="DM Serif Display, serif" id="ring-label">0%</text>
+        </svg>
+      </div>
+      <div class="result-title" id="result-title">Nice work</div>
+      <div class="result-sub" id="result-sub"></div>
+    </div>
 
-  <!-- Phase 0: Respond -->
-  <div class="phase-panel" id="phase-0">
-    <div class="info-note">
-      <i class="ti ti-info-circle"></i>
-      <span>Check every step you would take right now. Work through them in whatever order feels right to you. Submit when ready.</span>
+    <div class="result-stats">
+      <div class="stat-box">
+        <div class="stat-val" id="stat-correct" style="color:#2D6A4F">0</div>
+        <div class="stat-key">Correct</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-val" id="stat-wrong" style="color:#C94A1A">0</div>
+        <div class="stat-key">Wrong</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-val" id="stat-score">0</div>
+        <div class="stat-key">Points</div>
+      </div>
     </div>
-    <div class="timer-row">
-      <div class="timer-bg"><div class="timer-fill" id="timer-fill" style="width:100%"></div></div>
-      <span class="timer-txt" id="timer-txt">5:00</span>
-      <button class="timer-toggle" id="timer-btn" onclick="toggleTimer()">
-        <i class="ti ti-player-play" id="timer-icon"></i> Start
-      </button>
-    </div>
-    <div class="section-label"><i class="ti ti-cursor-text"></i> My immediate response steps</div>
-    <div class="checklist" id="response-checklist"></div>
-    <div class="btn-row">
-      <button class="btn btn-blue" onclick="submitResponse()">Submit response <i class="ti ti-arrow-right"></i></button>
-    </div>
-  </div>
 
-  <!-- Phase 1: Review -->
-  <div class="phase-panel" id="phase-1">
-    <div class="section-label"><i class="ti ti-eye"></i> Correct response review</div>
-    <div class="score-card" id="score-card"></div>
-    <div class="review-list" id="review-list"></div>
-    <div class="btn-row">
-      <button class="btn btn-blue" onclick="goPhase(2)">Policy alignment <i class="ti ti-arrow-right"></i></button>
+    <div class="result-breakdown">
+      <div class="breakdown-label">Full review</div>
+      <div id="breakdown-list"></div>
     </div>
-  </div>
 
-  <!-- Phase 2: Policy -->
-  <div class="phase-panel" id="phase-2">
-    <div class="section-label"><i class="ti ti-book"></i> Policy alignment</div>
-    <div class="info-note">
-      <i class="ti ti-info-circle"></i>
-      <span>These actions map directly to your organization's incident-response policy. Remember: <strong>reporting early is always correct</strong>. No blame for honest mistakes.</span>
+    <div class="tip-box" id="tip-box">
+      <div class="tip-kicker">Remember this</div>
+      <div class="tip-text" id="tip-text"></div>
     </div>
-    <div class="policy-tags" id="policy-tags"></div>
-    <hr class="divider" />
-    <div class="section-label"><i class="ti ti-list-check"></i> Universal quick-reference steps</div>
-    <div class="review-list" id="policy-detail"></div>
-    <div class="btn-row">
-      <button class="btn btn-blue" onclick="goPhase(3)">Open documentation <i class="ti ti-arrow-right"></i></button>
+
+    <div class="nav-row">
+      <button class="btn btn-ink" onclick="goHome()">Try another →</button>
     </div>
   </div>
 
-  <!-- Phase 3: Document -->
-  <div class="phase-panel" id="phase-3">
-    <div class="section-label"><i class="ti ti-file-description"></i> Post-drill documentation</div>
-    <div class="info-note">
-      <i class="ti ti-info-circle"></i>
-      <span>Fill this in as if writing a real incident report. Be specific — include times, actions taken, and who you contacted.</span>
-    </div>
-    <div class="doc-form">
-      <div class="field-row">
-        <div class="field">
-          <label>Staff name</label>
-          <input type="text" id="f-name" placeholder="Your full name" />
-        </div>
-        <div class="field">
-          <label>Date</label>
-          <input type="text" id="f-date" placeholder="Today's date" />
-        </div>
-      </div>
-      <div class="field">
-        <label>Scenario used</label>
-        <input type="text" id="f-scenario" readonly />
-      </div>
-      <div class="field">
-        <label>What I observed</label>
-        <textarea id="f-observed" placeholder="Describe what you saw, heard, or received — include every detail you noticed..."></textarea>
-      </div>
-      <div class="field">
-        <label>Immediate actions I took</label>
-        <textarea id="f-actions" placeholder="List every step you took, in the order you took them..."></textarea>
-      </div>
-      <div class="field">
-        <label>Who I reported to</label>
-        <input type="text" id="f-reported" placeholder="Name, role, and method (email / phone / ticket system)..." />
-      </div>
-      <div class="field">
-        <label>Additional notes</label>
-        <textarea id="f-notes" placeholder="Anything else relevant..." style="min-height:60px"></textarea>
-      </div>
-    </div>
-
-    <div class="complete-banner" id="complete-banner">
-      <h2><i class="ti ti-circle-check"></i> Drill complete</h2>
-      <p>Well done. Your documentation is filled in. In a real incident, submit this report to IT/security immediately and preserve all evidence until instructed otherwise.</p>
-    </div>
-
-    <div class="btn-row">
-      <button class="btn btn-green" onclick="completeDrill()"><i class="ti ti-check"></i> Complete drill</button>
-      <button class="btn" onclick="resetAll()"><i class="ti ti-refresh"></i> Run another drill</button>
-    </div>
-  </div>
-
-</div><!-- /shell -->
+</div><!-- /wrap -->
 
 <script>
-  /* ─────────────────────────────────────────
-     SCENARIO DATA
-  ───────────────────────────────────────── */
+  /* ── DATA ── */
   const SCENARIOS = {
     login: {
-      label: 'Suspicious login alert',
-      prompt: 'You receive an alert saying your account was accessed from an unknown location you don\'t recognize. The alert arrived via email with a link to "verify your account."',
+      name: 'Suspicious login alert',
+      tag: 'Account security',
+      prompt: 'You get an email alert: your account was accessed from an unknown location. The email has a "Verify Now" button.',
+      tip: 'Never click links in security alert emails. Always go directly to the site by typing the URL yourself. Clicking that link is exactly what attackers want.',
       steps: [
-        { id: 'verify',  text: 'Verify the alert by navigating directly to the official site — do NOT click the link inside the alert email.' },
-        { id: 'report',  text: 'Report the incident to IT/security immediately through the correct channel.' },
-        { id: 'doc',     text: 'Document the time, take a screenshot, and write down everything you observed.' },
-        { id: 'no-del',  text: 'Do not delete the alert or email — preserve all evidence as-is.' },
-        { id: 'no-set',  text: 'Do not change any account settings unless IT/security specifically instructs you to.' },
-      ],
-      policy: [
-        'Verify alerts via official URL — never follow embedded links',
-        'Report through the correct IT/security channel',
-        'Preserve the alert and email as evidence',
-        'No self-remediation without IT guidance',
+        {
+          question: 'Your first move?',
+          options: [
+            { text: 'Click the "Verify Now" button in the email to check your account.', correct: false, why: 'That link could be phishing. Clicking it hands your credentials to an attacker.' },
+            { text: 'Open your browser and go directly to the site by typing the URL yourself.', correct: true, why: 'Correct. Always verify by navigating directly — never through an email link.' },
+            { text: 'Ignore it — probably spam.', correct: false, why: 'A real login from an unknown location is a genuine security event. Never ignore it.' },
+          ]
+        },
+        {
+          question: 'You confirm it was an unauthorized login. Now what?',
+          options: [
+            { text: 'Tell IT/security right away using your company\'s official reporting channel.', correct: true, why: 'Correct. Report immediately — the sooner IT knows, the faster they can act.' },
+            { text: 'Change your password and assume the problem is solved.', correct: false, why: 'Self-remediation without IT guidance can destroy evidence and miss deeper issues.' },
+            { text: 'Post about it in the team Slack to warn colleagues.', correct: false, why: 'Informal channels aren\'t the right way. Use the official IT/security process.' },
+          ]
+        },
+        {
+          question: 'What should you keep?',
+          options: [
+            { text: 'Delete the alert email — you\'ve already reported it so it\'s useless.', correct: false, why: 'Evidence must be preserved. IT may need the original email headers for investigation.' },
+            { text: 'Take a screenshot and keep the original email untouched.', correct: true, why: 'Correct. Document everything and preserve the original — never delete anything.' },
+            { text: 'Forward it to your personal email just in case.', correct: false, why: 'Forwarding alert emails to personal accounts can further compromise security.' },
+          ]
+        }
       ]
     },
     phishing: {
-      label: 'Phishing link clicked',
-      prompt: 'You receive an email that looks like it\'s from your HR system asking you to update your direct deposit info. You clicked the link before realising it might be fake.',
+      name: 'Phishing link clicked',
+      tag: 'Email threat',
+      prompt: 'An email from "HR" asks you to update your direct deposit info. You clicked the link before realising it looked off.',
+      tip: 'The moment you click a suspicious link, isolate first — then report. Speed matters. Every second the device stays connected, potential malware has more time to spread or exfiltrate data.',
       steps: [
-        { id: 'isolate',  text: 'Isolate the device immediately — disconnect from Wi-Fi and unplug the network cable.' },
-        { id: 'report',   text: 'Report the incident to IT/security right away. Do not wait to see if anything happens.' },
-        { id: 'doc',      text: 'Document everything: the email, the link, the time, and any other details you noticed.' },
-        { id: 'no-del',   text: 'Do not delete the email or browser history — these are critical evidence.' },
-        { id: 'no-pwd',   text: 'Do not attempt to change passwords or take any remediation action until IT explicitly instructs you.' },
-      ],
-      policy: [
-        'Isolate device immediately on suspected compromise',
-        'Report without delay — early reporting limits damage',
-        'Preserve the phishing email as evidence',
-        'No self-remediation until IT authorizes it',
-        'Follow lost-credential policy if login data was entered',
+        {
+          question: 'You just clicked. What do you do right now?',
+          options: [
+            { text: 'Disconnect from Wi-Fi and unplug the network cable immediately.', correct: true, why: 'Correct. Isolating the device stops any potential malware from spreading across the network.' },
+            { text: 'Run a quick antivirus scan to check if anything installed.', correct: false, why: 'Don\'t self-remediate. You could interfere with forensic evidence. Let IT handle it.' },
+            { text: 'Close the browser tab — that should be enough.', correct: false, why: 'Closing the tab does nothing if something already downloaded or ran in the background.' },
+          ]
+        },
+        {
+          question: 'Device is isolated. What next?',
+          options: [
+            { text: 'Wait and see if anything strange happens before bothering IT.', correct: false, why: 'Never wait. Incidents escalate fast. Early reporting limits the damage significantly.' },
+            { text: 'Report to IT/security immediately using your company\'s correct channel.', correct: true, why: 'Correct. Report right away — include what you clicked, when, and what happened after.' },
+            { text: 'Log into your accounts from your personal phone to check if anything was stolen.', correct: false, why: 'Using personal devices for sensitive logins creates more risk, not less.' },
+          ]
+        },
+        {
+          question: 'IT asks for evidence. What do you have ready?',
+          options: [
+            { text: 'Nothing — you deleted the email so it wouldn\'t spread.', correct: false, why: 'Deleting evidence makes investigation much harder. Always preserve everything.' },
+            { text: 'The email, the link URL you clicked, the time it happened, and what you saw on screen.', correct: true, why: 'Correct. Detailed documentation helps IT investigate and contain the incident faster.' },
+            { text: 'Just your best guess at what the link said.', correct: false, why: 'Guessing isn\'t enough. Document specifics — screenshots, exact URLs, timestamps.' },
+          ]
+        }
       ]
     },
     device: {
-      label: 'Lost or stolen device',
-      prompt: 'You leave a meeting room and realise your work laptop is no longer where you left it. You are not sure if it was stolen or if you simply misplaced it.',
+      name: 'Lost or stolen device',
+      tag: 'Physical security',
+      prompt: 'You finish a meeting and realize your work laptop isn\'t where you left it. You\'re not sure if it\'s stolen or misplaced.',
+      tip: 'Time is critical with lost devices. The faster IT knows, the faster they can remotely lock or wipe it. Do not wait until you\'re sure it\'s gone — report the moment you suspect it.',
       steps: [
-        { id: 'report',   text: 'Report the loss to IT/security immediately — do not wait to confirm it is truly missing.' },
-        { id: 'doc',      text: 'Document the last known location, time seen, and any other relevant details.' },
-        { id: 'no-wipe',  text: 'Do not attempt a remote wipe yourself unless you have been specifically trained and authorized to do so.' },
-        { id: 'no-per',   text: 'Do not log into sensitive work systems from a personal or untrusted device.' },
-        { id: 'policy',   text: 'Follow your organization\'s lost-device policy exactly and await IT/security instructions.' },
-      ],
-      policy: [
-        'Report immediately — time matters for remote lock and wipe',
-        'No self-remediation (remote wipe without IT guidance)',
-        'No sensitive access from personal devices',
-        'Follow lost-device policy as written',
-      ]
-    },
-    malware: {
-      label: 'Suspicious pop-up / malware',
-      prompt: 'A pop-up appears on your screen saying "Your device is critically infected — call 1-800-XXX-XXXX immediately" and your browser appears to be frozen.',
-      steps: [
-        { id: 'isolate',   text: 'Isolate the device — turn off Wi-Fi and unplug the network cable right away.' },
-        { id: 'no-click',  text: 'Do not click, close, or interact with the pop-up in any way.' },
-        { id: 'report',    text: 'Report immediately to IT/security — include a photo or written description of what you see.' },
-        { id: 'doc',       text: 'Document what you observed: what the pop-up said, what you were doing, and the exact time.' },
-        { id: 'untouched', text: 'Leave the device completely untouched and wait for IT/security to respond and take over.' },
-      ],
-      policy: [
-        'Isolate device immediately to contain potential spread',
-        'Do not interact with malicious pop-ups',
-        'Report with documentation (a photo is acceptable)',
-        'Leave device untouched for forensic examination',
+        {
+          question: 'You notice the laptop is missing. First step?',
+          options: [
+            { text: 'Spend 30 minutes searching every room before telling anyone.', correct: false, why: 'Every minute of delay is a minute a bad actor could access your data. Report first.' },
+            { text: 'Report it to IT/security immediately — even if it might just be misplaced.', correct: true, why: 'Correct. Report right away. IT can put a hold on the device while you look. No harm done if it turns up.' },
+            { text: 'Log into the device remotely to check what\'s on it.', correct: false, why: 'Remote access confirms it\'s online — but IT should handle any remote action, not you.' },
+          ]
+        },
+        {
+          question: 'IT asks what you know. What do you tell them?',
+          options: [
+            { text: 'Last known location, the time you last had it, and anything unusual you noticed.', correct: true, why: 'Correct. Specific details help IT and security act fast and file an accurate report.' },
+            { text: 'Just that it\'s missing — you don\'t want to waste their time with details.', correct: false, why: 'Details matter. Location, time, and context can be critical for recovery and investigation.' },
+            { text: 'Nothing yet — you\'ll wait until you\'re sure it\'s actually gone.', correct: false, why: 'Report immediately with what you know. Don\'t wait for certainty.' },
+          ]
+        },
+        {
+          question: 'You need to keep working. What\'s acceptable?',
+          options: [
+            { text: 'Log into your work email and files from your personal laptop to stay productive.', correct: false, why: 'Using unmanaged personal devices for work access creates a new security gap.' },
+            { text: 'Do a remote wipe of the device yourself using the IT portal.', correct: false, why: 'Only trained IT staff should perform remote wipes. DIY attempts can go wrong.' },
+            { text: 'Wait for IT guidance before accessing any work systems on another device.', correct: true, why: 'Correct. IT will provision a safe way for you to continue working without creating new risks.' },
+          ]
+        }
       ]
     }
   };
 
-  const UNIVERSAL_STEPS = [
-    'Stop what you are doing as soon as you notice something wrong.',
-    'Isolate the device if there is any risk of spread or data loss.',
-    'Report through the correct channel — do not assume IT already knows.',
-    'Document everything you observed, even small or seemingly minor details.',
-    'Do not delete, modify, or move anything that could be evidence.',
-    'Wait for IT/security instructions before taking any further action.',
-  ];
+  /* ── STATE ── */
+  let scenario = null;
+  let stepIndex = 0;
+  let score = 0;
+  let correctCount = 0;
+  let wrongCount = 0;
+  let answered = false;
+  let history = [];
 
-  /* ─────────────────────────────────────────
-     STATE
-  ───────────────────────────────────────── */
-  let currentScenario = null;
-  let checkedIds = new Set();
-  let timerSeconds = 300;
-  let timerInterval = null;
-  let timerRunning = false;
-  const TIMER_MAX = 300;
-
-  /* ─────────────────────────────────────────
-     SCENARIO PICKER
-  ───────────────────────────────────────── */
+  /* ── HOME ── */
   function pickScenario(id, el) {
-    currentScenario = id;
-    document.querySelectorAll('.scenario-card').forEach(c => c.classList.remove('active'));
+    scenario = id;
+    document.querySelectorAll('.sc-card').forEach(c => c.classList.remove('active'));
     el.classList.add('active');
     const s = SCENARIOS[id];
-    document.getElementById('prompt-text').textContent = s.prompt;
-    document.getElementById('scenario-prompt').classList.add('visible');
-    document.getElementById('start-row').style.display = 'flex';
+    document.getElementById('home-prompt-text').textContent = s.prompt;
+    document.getElementById('home-prompt').classList.add('visible');
+    const btn = document.getElementById('btn-start');
+    btn.classList.add('visible');
   }
 
-  /* ─────────────────────────────────────────
-     START DRILL
-  ───────────────────────────────────────── */
   function startDrill() {
-    if (!currentScenario) return;
-    document.getElementById('step-picker').style.display = 'none';
-    document.getElementById('phase-track').style.display = 'flex';
-    buildChecklist();
-    prefillDoc();
-    goPhase(0);
+    if (!scenario) return;
+    stepIndex = 0;
+    score = 0;
+    correctCount = 0;
+    wrongCount = 0;
+    history = [];
+    answered = false;
+    document.getElementById('score-pill').style.display = 'block';
+    updateScorePill();
+    showScreen('screen-drill');
+    renderStep();
   }
 
-  /* ─────────────────────────────────────────
-     BUILD CHECKLIST
-  ───────────────────────────────────────── */
-  function buildChecklist() {
-    const s = SCENARIOS[currentScenario];
-    const cl = document.getElementById('response-checklist');
-    cl.innerHTML = '';
-    checkedIds = new Set();
-    s.steps.forEach(step => {
-      const div = document.createElement('div');
-      div.className = 'check-item';
-      div.id = 'ci-' + step.id;
-      div.setAttribute('role', 'checkbox');
-      div.setAttribute('aria-checked', 'false');
-      div.setAttribute('tabindex', '0');
-      div.innerHTML = `
-        <div class="check-box"><i class="ti ti-check"></i></div>
-        <div class="check-label">${step.text}</div>`;
-      div.onclick = () => toggleCheck(step.id, div);
-      div.onkeydown = (e) => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); toggleCheck(step.id, div); } };
-      cl.appendChild(div);
-    });
-  }
-
-  function toggleCheck(id, el) {
-    if (checkedIds.has(id)) {
-      checkedIds.delete(id);
-      el.classList.remove('checked');
-      el.setAttribute('aria-checked', 'false');
-    } else {
-      checkedIds.add(id);
-      el.classList.add('checked');
-      el.setAttribute('aria-checked', 'true');
-    }
-  }
-
-  /* ─────────────────────────────────────────
-     SUBMIT RESPONSE
-  ───────────────────────────────────────── */
-  function submitResponse() {
-    stopTimer();
-    const s = SCENARIOS[currentScenario];
+  /* ── DRILL ── */
+  function renderStep() {
+    const s = SCENARIOS[scenario];
+    const step = s.steps[stepIndex];
     const total = s.steps.length;
-    const correct = s.steps.filter(st => checkedIds.has(st.id)).length;
-    const pct = Math.round((correct / total) * 100);
 
-    // Mark missed items
-    s.steps.forEach(st => {
-      const el = document.getElementById('ci-' + st.id);
-      if (!checkedIds.has(st.id) && el) {
-        el.classList.add('missed');
-        el.querySelector('i').className = 'ti ti-x';
-      }
-    });
+    document.getElementById('drill-eyebrow').textContent = s.tag + '  ·  Step ' + (stepIndex + 1) + ' of ' + total;
+    document.getElementById('drill-title').textContent = step.question;
+    document.getElementById('drill-prompt').textContent = s.prompt;
+    document.getElementById('progress-fill').style.width = (stepIndex / total * 100) + '%';
+    document.getElementById('progress-label').textContent = stepIndex + ' / ' + total + ' done';
+    document.getElementById('ls-correct').textContent = correctCount;
+    document.getElementById('ls-wrong').textContent = wrongCount;
+    document.getElementById('ls-score').textContent = score;
 
-    // Score label + color
-    let grade, gradeColor;
-    if (pct === 100) { grade = 'Perfect score'; gradeColor = '#1D9E75'; }
-    else if (pct >= 80) { grade = 'Good';        gradeColor = '#378ADD'; }
-    else if (pct >= 60) { grade = 'Needs work';  gradeColor = '#BA7517'; }
-    else                { grade = 'Review needed'; gradeColor = '#E24B4A'; }
+    const feedback = document.getElementById('feedback');
+    feedback.className = 'feedback';
+    feedback.textContent = '';
 
-    const circumference = 2 * Math.PI * 26;
-    const dash = Math.round(circumference * pct / 100);
-    const missed = total - correct;
+    const nav = document.getElementById('nav-row');
+    nav.style.display = 'none';
 
-    document.getElementById('score-card').innerHTML = `
-      <svg class="score-ring" viewBox="0 0 64 64" aria-label="${pct}% score">
-        <circle cx="32" cy="32" r="26" fill="none" stroke="var(--border-light)" stroke-width="6"/>
-        <circle cx="32" cy="32" r="26" fill="none" stroke="${gradeColor}" stroke-width="6"
-          stroke-dasharray="${dash} 999" stroke-linecap="round"
-          transform="rotate(-90 32 32)"/>
-        <text x="32" y="37" text-anchor="middle" font-size="13" font-weight="600"
-          fill="${gradeColor}" font-family="-apple-system,sans-serif">${pct}%</text>
-      </svg>
-      <div class="score-info">
-        <h3>${grade} &mdash; ${correct} of ${total} steps identified</h3>
-        <p>${missed === 0
-          ? 'You identified all required response steps correctly. Well done!'
-          : `You missed ${missed} step${missed > 1 ? 's' : ''}. Review the items highlighted below.`}</p>
-      </div>`;
+    const list = document.getElementById('options-list');
+    list.innerHTML = '';
+    answered = false;
 
-    const rl = document.getElementById('review-list');
-    rl.innerHTML = '';
-    s.steps.forEach(st => {
-      const ok = checkedIds.has(st.id);
-      const row = document.createElement('div');
-      row.className = 'review-row ' + (ok ? 'correct' : 'wrong');
-      row.innerHTML = `<i class="ti ${ok ? 'ti-circle-check' : 'ti-circle-x'}"></i><span>${st.text}</span>`;
-      rl.appendChild(row);
-    });
-
-    goPhase(1);
-  }
-
-  /* ─────────────────────────────────────────
-     POLICY PHASE
-  ───────────────────────────────────────── */
-  function buildPolicy() {
-    const s = SCENARIOS[currentScenario];
-    const pt = document.getElementById('policy-tags');
-    pt.innerHTML = '';
-    s.policy.forEach(p => {
-      const t = document.createElement('span');
-      t.className = 'ptag';
-      t.textContent = p;
-      pt.appendChild(t);
-    });
-    const pd = document.getElementById('policy-detail');
-    pd.innerHTML = '';
-    UNIVERSAL_STEPS.forEach(st => {
-      const row = document.createElement('div');
-      row.className = 'review-row correct';
-      row.innerHTML = `<i class="ti ti-point-filled" style="font-size:10px;margin-top:5px"></i><span>${st}</span>`;
-      pd.appendChild(row);
+    const shuffled = shuffle([...step.options]);
+    shuffled.forEach((opt, i) => {
+      const div = document.createElement('div');
+      div.className = 'opt';
+      div.setAttribute('tabindex', '0');
+      div.innerHTML = `<div class="opt-dot">${String.fromCharCode(65 + i)}</div><div class="opt-text">${opt.text}</div>`;
+      div.onclick = () => chooseOption(opt, div, step);
+      div.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); chooseOption(opt, div, step); } };
+      list.appendChild(div);
     });
   }
 
-  /* ─────────────────────────────────────────
-     DOCUMENTATION
-  ───────────────────────────────────────── */
-  function prefillDoc() {
-    const s = SCENARIOS[currentScenario];
-    const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-    document.getElementById('f-date').value = today;
-    document.getElementById('f-scenario').value = s.label;
-  }
+  function chooseOption(opt, el, step) {
+    if (answered) return;
+    answered = true;
 
-  function completeDrill() {
-    const banner = document.getElementById('complete-banner');
-    banner.classList.add('visible');
-    banner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  }
+    const allOpts = document.querySelectorAll('.opt');
+    allOpts.forEach(o => o.classList.add('locked'));
 
-  /* ─────────────────────────────────────────
-     PHASE NAVIGATION
-  ───────────────────────────────────────── */
-  function goPhase(n) {
-    document.querySelectorAll('.phase-panel').forEach(p => p.classList.remove('active'));
-    document.getElementById('phase-' + n).classList.add('active');
-    ['pip-0','pip-1','pip-2','pip-3'].forEach((id, i) => {
-      const el = document.getElementById(id);
-      el.classList.remove('current', 'done');
-      if (i < n) el.classList.add('done');
-      else if (i === n) el.classList.add('current');
-    });
-    if (n === 2) buildPolicy();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
+    const feedback = document.getElementById('feedback');
 
-  /* ─────────────────────────────────────────
-     RESET
-  ───────────────────────────────────────── */
-  function resetAll() {
-    currentScenario = null;
-    checkedIds = new Set();
-    stopTimer();
-    timerSeconds = TIMER_MAX;
-    timerRunning = false;
-    updateTimerDisplay();
-    document.getElementById('timer-icon').className = 'ti ti-player-play';
-    document.getElementById('timer-btn').innerHTML = '<i class="ti ti-player-play" id="timer-icon"></i> Start';
-
-    document.getElementById('step-picker').style.display = 'block';
-    document.getElementById('phase-track').style.display = 'none';
-    document.querySelectorAll('.phase-panel').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.scenario-card').forEach(c => c.classList.remove('active'));
-    document.getElementById('scenario-prompt').classList.remove('visible');
-    document.getElementById('start-row').style.display = 'none';
-    document.getElementById('complete-banner').classList.remove('visible');
-    ['f-name','f-observed','f-actions','f-reported','f-notes'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.value = '';
-    });
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  /* ─────────────────────────────────────────
-     TIMER
-  ───────────────────────────────────────── */
-  function toggleTimer() {
-    if (timerRunning) {
-      stopTimer();
-      document.getElementById('timer-btn').innerHTML = '<i class="ti ti-player-play"></i> Resume';
+    if (opt.correct) {
+      el.classList.add('correct');
+      el.querySelector('.opt-dot').textContent = '✓';
+      score += 10;
+      correctCount++;
+      feedback.textContent = '✓  ' + opt.why;
+      feedback.className = 'feedback visible good';
     } else {
-      startTimerRun();
-      document.getElementById('timer-btn').innerHTML = '<i class="ti ti-player-pause"></i> Pause';
+      el.classList.add('wrong');
+      el.querySelector('.opt-dot').textContent = '✕';
+      score = Math.max(0, score - 5);
+      wrongCount++;
+      feedback.textContent = '✕  ' + opt.why;
+      feedback.className = 'feedback visible bad';
+      allOpts.forEach(o => {
+        const txt = o.querySelector('.opt-text').textContent;
+        if (txt === step.options.find(s => s.correct).text) {
+          o.classList.add('missed');
+          o.querySelector('.opt-dot').textContent = '✓';
+        }
+      });
+    }
+
+    history.push({ text: opt.text, correct: opt.correct, why: opt.why });
+    updateScorePill();
+    document.getElementById('ls-correct').textContent = correctCount;
+    document.getElementById('ls-wrong').textContent = wrongCount;
+    document.getElementById('ls-score').textContent = score;
+
+    const nav = document.getElementById('nav-row');
+    const btn = document.getElementById('btn-next');
+    const isLast = stepIndex === SCENARIOS[scenario].steps.length - 1;
+    btn.textContent = isLast ? 'See results →' : 'Next step →';
+    nav.style.display = 'flex';
+  }
+
+  function nextStep() {
+    const total = SCENARIOS[scenario].steps.length;
+    stepIndex++;
+    if (stepIndex >= total) {
+      showResults();
+    } else {
+      renderStep();
     }
   }
 
-  function startTimerRun() {
-    timerRunning = true;
-    timerInterval = setInterval(() => {
-      if (timerSeconds > 0) {
-        timerSeconds--;
-        updateTimerDisplay();
-      } else {
-        stopTimer();
-        document.getElementById('timer-btn').innerHTML = '<i class="ti ti-clock"></i> Time\'s up';
-      }
-    }, 1000);
+  /* ── RESULTS ── */
+  function showResults() {
+    showScreen('screen-results');
+    const total = SCENARIOS[scenario].steps.length;
+    const maxScore = total * 10;
+    const pct = Math.round((score / maxScore) * 100);
+    const circ = 2 * Math.PI * 44;
+    const dash = Math.round(circ * Math.max(pct, 0) / 100);
+
+    document.getElementById('ring-arc').setAttribute('stroke-dasharray', dash + ' 999');
+    document.getElementById('ring-arc').setAttribute('stroke', pct >= 70 ? '#2D6A4F' : pct >= 40 ? '#B5400A' : '#C94A1A');
+    document.getElementById('ring-label').textContent = pct + '%';
+
+    let title, sub;
+    if (pct === 100) { title = 'Perfect.'; sub = 'Every decision was spot on. You\'re ready for the real thing.'; }
+    else if (pct >= 70) { title = 'Good work.'; sub = 'Solid instincts. Review the wrong ones below so they stick.'; }
+    else if (pct >= 40) { title = 'Keep practicing.'; sub = 'Some gaps to close. Read through the explanations carefully.'; }
+    else { title = 'Let\'s learn.'; sub = 'No stress — that\'s what drills are for. Review each step below.'; }
+
+    document.getElementById('result-title').textContent = title;
+    document.getElementById('result-sub').textContent = sub;
+    document.getElementById('stat-correct').textContent = correctCount;
+    document.getElementById('stat-wrong').textContent = wrongCount;
+    document.getElementById('stat-score').textContent = score;
+
+    const list = document.getElementById('breakdown-list');
+    list.innerHTML = '';
+    history.forEach(h => {
+      const row = document.createElement('div');
+      row.className = 'breakdown-row ' + (h.correct ? 'c' : 'w');
+      row.innerHTML = `<div class="breakdown-dot">${h.correct ? '✓' : '✕'}</div><div>${h.why}</div>`;
+      list.appendChild(row);
+    });
+
+    document.getElementById('tip-text').textContent = SCENARIOS[scenario].tip;
+    document.getElementById('progress-fill').style.width = '100%';
+    document.getElementById('progress-label').textContent = SCENARIOS[scenario].steps.length + ' / ' + SCENARIOS[scenario].steps.length + ' done';
   }
 
-  function stopTimer() {
-    timerRunning = false;
-    clearInterval(timerInterval);
+  /* ── HELPERS ── */
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  function updateTimerDisplay() {
-    const m = Math.floor(timerSeconds / 60);
-    const s = timerSeconds % 60;
-    document.getElementById('timer-txt').textContent = m + ':' + String(s).padStart(2, '0');
-    const pct = (timerSeconds / TIMER_MAX) * 100;
-    const fill = document.getElementById('timer-fill');
-    fill.style.width = pct + '%';
-    fill.style.background =
-      timerSeconds > 120 ? 'var(--green-400)' :
-      timerSeconds > 60  ? 'var(--amber-600)' : 'var(--red-400)';
+  function goHome() {
+    document.getElementById('score-pill').style.display = 'none';
+    document.querySelectorAll('.sc-card').forEach(c => c.classList.remove('active'));
+    document.getElementById('home-prompt').classList.remove('visible');
+    document.getElementById('btn-start').classList.remove('visible');
+    scenario = null;
+    showScreen('screen-home');
   }
 
-  updateTimerDisplay();
+  function updateScorePill() {
+    document.getElementById('score-pill').textContent = score + ' pts';
+  }
+
+  function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
 </script>
 </body>
 </html>
