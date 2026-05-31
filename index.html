@@ -153,7 +153,67 @@
       background: var(--paper-4);
     }
 
-    /* ── Scenario cards ── */
+    /* ── Home banner ── */
+    .home-banner {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      background: var(--paper-2);
+      border: 1px solid var(--paper-3);
+      border-radius: var(--r-lg);
+      padding: 32px 28px 28px;
+      margin-bottom: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .home-banner-text { flex: 1; min-width: 0; }
+    .home-art {
+      width: 200px;
+      height: 190px;
+      flex-shrink: 0;
+      opacity: 0.9;
+    }
+    @media (max-width: 560px) {
+      .home-art { display: none; }
+      .home-banner { padding: 24px 20px; }
+    }
+
+    /* ── Home stats strip ── */
+    .home-stats {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      background: var(--ink);
+      border-radius: var(--r);
+      padding: 16px 24px;
+      margin-bottom: 1.75rem;
+    }
+    .hstat {
+      flex: 1;
+      text-align: center;
+    }
+    .hstat-val {
+      font-family: var(--font-head);
+      font-size: 24px;
+      color: var(--paper);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .hstat-key {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(240,235,225,0.45);
+    }
+    .hstat-div {
+      width: 1px;
+      height: 32px;
+      background: rgba(255,255,255,0.1);
+    }
+
+    /* ── Home hero (inside banner now) ── */
     .section-eyebrow {
       font-size: 11px;
       font-weight: 600;
@@ -323,12 +383,13 @@
       max-width: 520px;
     }
     .drill-scenario-prompt {
-      font-size: 13px;
+      font-size: 16px;
+      font-weight: 500;
       color: var(--ink-mid);
-      line-height: 1.55;
+      line-height: 1.6;
       background: rgba(255,255,255,0.55);
       border-left: 3px solid var(--accent);
-      padding: 9px 13px;
+      padding: 12px 16px;
       border-radius: 0 8px 8px 0;
       position: relative;
     }
@@ -710,10 +771,93 @@
 
   <!-- ══ HOME ══ -->
   <div class="screen active" id="screen-home">
-    <div class="home-hero">
-      <div class="home-eyebrow">Staff training &mdash; 5 min drill</div>
-      <h1 class="home-title">Know what<br>to do when<br>it <em>matters.</em></h1>
-      <p class="home-sub">Pick a scenario. You'll see a mix of correct and wrong actions — spot the right ones and learn exactly why the others are dangerous.</p>
+
+    <!-- Abstract hero banner -->
+    <div class="home-banner">
+      <div class="home-banner-text">
+        <div class="home-eyebrow">Staff training &mdash; 5 min drill</div>
+        <h1 class="home-title">Know what<br>to do when<br>it <em>matters.</em></h1>
+        <p class="home-sub">Pick a scenario. You'll see a mix of correct and wrong actions — spot the right ones and learn exactly why the others are dangerous.</p>
+      </div>
+      <!-- Abstract SVG line art -->
+      <svg class="home-art" viewBox="0 0 340 320" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <!-- Concentric arcs -->
+        <path d="M280 160 A120 120 0 0 1 160 280" stroke="#C94A1A" stroke-width="1" stroke-dasharray="4 8" opacity="0.35"/>
+        <path d="M300 160 A140 140 0 0 1 160 300" stroke="#C94A1A" stroke-width="0.75" stroke-dasharray="2 10" opacity="0.2"/>
+        <path d="M260 160 A100 100 0 0 1 160 260" stroke="#C94A1A" stroke-width="1.5" opacity="0.18"/>
+
+        <!-- Grid lines -->
+        <line x1="40" y1="0"   x2="40" y2="320" stroke="#1C1810" stroke-width="0.5" opacity="0.07"/>
+        <line x1="100" y1="0"  x2="100" y2="320" stroke="#1C1810" stroke-width="0.5" opacity="0.07"/>
+        <line x1="160" y1="0"  x2="160" y2="320" stroke="#1C1810" stroke-width="0.5" opacity="0.07"/>
+        <line x1="220" y1="0"  x2="220" y2="320" stroke="#1C1810" stroke-width="0.5" opacity="0.07"/>
+        <line x1="280" y1="0"  x2="280" y2="320" stroke="#1C1810" stroke-width="0.5" opacity="0.07"/>
+        <line x1="0" y1="60"   x2="340" y2="60"  stroke="#1C1810" stroke-width="0.5" opacity="0.07"/>
+        <line x1="0" y1="120"  x2="340" y2="120" stroke="#1C1810" stroke-width="0.5" opacity="0.07"/>
+        <line x1="0" y1="180"  x2="340" y2="180" stroke="#1C1810" stroke-width="0.5" opacity="0.07"/>
+        <line x1="0" y1="240"  x2="340" y2="240" stroke="#1C1810" stroke-width="0.5" opacity="0.07"/>
+
+        <!-- Diagonal slashes -->
+        <line x1="180" y1="40"  x2="320" y2="180" stroke="#2D6A4F" stroke-width="1" opacity="0.2"/>
+        <line x1="200" y1="40"  x2="320" y2="160" stroke="#2D6A4F" stroke-width="0.75" opacity="0.14"/>
+        <line x1="160" y1="40"  x2="320" y2="200" stroke="#2D6A4F" stroke-width="0.75" stroke-dasharray="3 6" opacity="0.18"/>
+
+        <!-- Shield outline (abstract) -->
+        <path d="M170 50 L220 70 L220 120 C220 148 170 165 170 165 C170 165 120 148 120 120 L120 70 Z"
+          stroke="#1C1810" stroke-width="1.5" opacity="0.12" fill="none"/>
+        <path d="M170 62 L210 78 L210 118 C210 140 170 154 170 154 C170 154 130 140 130 118 L130 78 Z"
+          stroke="#C94A1A" stroke-width="1" opacity="0.22" fill="none"/>
+
+        <!-- Dot cluster -->
+        <circle cx="60"  cy="60"  r="2.5" fill="#C94A1A" opacity="0.3"/>
+        <circle cx="100" cy="60"  r="1.5" fill="#1C1810" opacity="0.2"/>
+        <circle cx="60"  cy="120" r="1.5" fill="#1C1810" opacity="0.2"/>
+        <circle cx="100" cy="120" r="2.5" fill="#2D6A4F" opacity="0.3"/>
+        <circle cx="60"  cy="180" r="1.5" fill="#1C1810" opacity="0.15"/>
+        <circle cx="160" cy="60"  r="2"   fill="#1A4F8A" opacity="0.25"/>
+        <circle cx="220" cy="60"  r="1.5" fill="#1C1810" opacity="0.15"/>
+        <circle cx="280" cy="60"  r="2.5" fill="#C94A1A" opacity="0.2"/>
+        <circle cx="280" cy="120" r="1.5" fill="#2D6A4F" opacity="0.2"/>
+        <circle cx="220" cy="180" r="2"   fill="#C94A1A" opacity="0.18"/>
+
+        <!-- Flowing curve -->
+        <path d="M20 200 C80 160 140 240 200 180 S300 120 340 100"
+          stroke="#1A4F8A" stroke-width="1.5" opacity="0.2" fill="none"/>
+        <path d="M20 220 C80 180 140 260 200 200 S300 140 340 120"
+          stroke="#1A4F8A" stroke-width="0.75" opacity="0.12" fill="none"/>
+
+        <!-- Corner bracket top-left -->
+        <path d="M20 40 L20 20 L40 20" stroke="#1C1810" stroke-width="1.5" opacity="0.2" fill="none" stroke-linecap="round"/>
+        <!-- Corner bracket bottom-right -->
+        <path d="M320 280 L320 300 L300 300" stroke="#C94A1A" stroke-width="1.5" opacity="0.25" fill="none" stroke-linecap="round"/>
+
+        <!-- Small cross marks -->
+        <path d="M55 240 L65 250 M65 240 L55 250" stroke="#C94A1A" stroke-width="1.2" opacity="0.3" stroke-linecap="round"/>
+        <path d="M290 190 L298 198 M298 190 L290 198" stroke="#2D6A4F" stroke-width="1.2" opacity="0.3" stroke-linecap="round"/>
+      </svg>
+    </div>
+
+    <!-- Stats strip -->
+    <div class="home-stats">
+      <div class="hstat">
+        <div class="hstat-val">3</div>
+        <div class="hstat-key">Scenarios</div>
+      </div>
+      <div class="hstat-div"></div>
+      <div class="hstat">
+        <div class="hstat-val">9</div>
+        <div class="hstat-key">Decisions</div>
+      </div>
+      <div class="hstat-div"></div>
+      <div class="hstat">
+        <div class="hstat-val">5<span style="font-size:16px">min</span></div>
+        <div class="hstat-key">Per drill</div>
+      </div>
+      <div class="hstat-div"></div>
+      <div class="hstat">
+        <div class="hstat-val">+10</div>
+        <div class="hstat-key">Pts correct</div>
+      </div>
     </div>
 
     <div class="hero-rule">
