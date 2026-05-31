@@ -28,7 +28,31 @@
       --r-lg:       20px;
     }
 
-    html { scroll-behavior: smooth; }
+    /* ── Background wave art ── */
+    .bg-art {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Side art ── */
+    .side-art {
+      position: fixed;
+      top: 0;
+      height: 100vh;
+      width: 160px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .side-art-left  { left: 0; }
+    .side-art-right { right: 0; }
+    @media (max-width: 1100px) { .side-art { width: 100px; } }
+    @media (max-width: 860px)  { .side-art { display: none; } }
+
+
 
     body {
       font-family: var(--font-body);
@@ -39,17 +63,7 @@
     }
 
     /* ── Decorative background pattern ── */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image:
-        radial-gradient(circle at 15% 15%, rgba(201,74,26,0.06) 0%, transparent 50%),
-        radial-gradient(circle at 85% 80%, rgba(45,106,79,0.06) 0%, transparent 50%),
-        radial-gradient(circle at 50% 50%, rgba(26,79,138,0.04) 0%, transparent 60%);
-      pointer-events: none;
-      z-index: 0;
-    }
+    body::before { display: none; }
 
     .wrap {
       max-width: 720px;
@@ -168,16 +182,6 @@
       overflow: hidden;
     }
     .home-banner-text { flex: 1; min-width: 0; }
-    .home-art {
-      width: 200px;
-      height: 190px;
-      flex-shrink: 0;
-      opacity: 0.9;
-    }
-    @media (max-width: 560px) {
-      .home-art { display: none; }
-      .home-banner { padding: 24px 20px; }
-    }
 
     /* ── Home stats strip ── */
     .home-stats {
@@ -756,6 +760,49 @@
   </style>
 </head>
 <body>
+
+<!-- Full background wave art -->
+<svg class="bg-art" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+
+  <!-- === LARGE SWEEPING WAVES across full width === -->
+
+  <!-- Wave group 1 — top area, sweeping left to right, warm red/gold tones -->
+  <path d="M-100 120 C 100 60 300 180 500 100 C 700 20 900 160 1100 80 C 1300 0 1400 100 1540 60" stroke="#C94A1A" stroke-width="1.6" opacity="0.13" fill="none" stroke-linecap="round"/>
+  <path d="M-100 145 C 100 85 300 205 500 125 C 700 45 900 185 1100 105 C 1300 25 1400 125 1540 85" stroke="#C94A1A" stroke-width="1.2" opacity="0.10" fill="none" stroke-linecap="round"/>
+  <path d="M-100 170 C 100 110 300 230 500 150 C 700 70 900 210 1100 130 C 1300 50 1400 150 1540 110" stroke="#C94A1A" stroke-width="0.9" opacity="0.08" fill="none" stroke-linecap="round"/>
+  <path d="M-100 195 C 100 135 300 255 500 175 C 700 95 900 235 1100 155 C 1300 75 1400 175 1540 135" stroke="#B5400A" stroke-width="0.7" opacity="0.07" fill="none" stroke-linecap="round"/>
+  <path d="M-100 218 C 100 158 300 278 500 198 C 700 118 900 258 1100 178 C 1300 98 1400 198 1540 158" stroke="#B5400A" stroke-width="0.6" opacity="0.06" fill="none" stroke-linecap="round"/>
+
+  <!-- Wave group 2 — mid-upper, green tones, flows opposite direction -->
+  <path d="M-100 300 C 150 380 350 260 600 340 C 820 410 1000 280 1250 360 C 1380 400 1460 320 1540 350" stroke="#2D6A4F" stroke-width="1.5" opacity="0.12" fill="none" stroke-linecap="round"/>
+  <path d="M-100 325 C 150 405 350 285 600 365 C 820 435 1000 305 1250 385 C 1380 425 1460 345 1540 375" stroke="#2D6A4F" stroke-width="1.1" opacity="0.09" fill="none" stroke-linecap="round"/>
+  <path d="M-100 348 C 150 428 350 308 600 388 C 820 458 1000 328 1250 408 C 1380 448 1460 368 1540 398" stroke="#2D6A4F" stroke-width="0.8" opacity="0.07" fill="none" stroke-linecap="round"/>
+  <path d="M-100 370 C 150 450 350 330 600 410 C 820 480 1000 350 1250 430 C 1380 470 1460 390 1540 420" stroke="#2D6A4F" stroke-width="0.6" opacity="0.06" fill="none" stroke-linecap="round"/>
+
+  <!-- Wave group 3 — centre, blue tones, wide lazy curves -->
+  <path d="M-100 480 C 200 420 450 560 720 490 C 950 430 1150 550 1400 480 C 1460 465 1510 472 1540 468" stroke="#1A4F8A" stroke-width="1.4" opacity="0.10" fill="none" stroke-linecap="round"/>
+  <path d="M-100 505 C 200 445 450 585 720 515 C 950 455 1150 575 1400 505 C 1460 490 1510 497 1540 493" stroke="#1A4F8A" stroke-width="1.0" opacity="0.08" fill="none" stroke-linecap="round"/>
+  <path d="M-100 528 C 200 468 450 608 720 538 C 950 478 1150 598 1400 528 C 1460 513 1510 520 1540 516" stroke="#1A4F8A" stroke-width="0.7" opacity="0.06" fill="none" stroke-linecap="round"/>
+
+  <!-- Wave group 4 — lower area, warm reds again, tighter ripple -->
+  <path d="M-100 620 C 120 560 280 660 480 590 C 680 520 860 640 1060 565 C 1240 498 1400 600 1540 550" stroke="#C94A1A" stroke-width="1.5" opacity="0.12" fill="none" stroke-linecap="round"/>
+  <path d="M-100 645 C 120 585 280 685 480 615 C 680 545 860 665 1060 590 C 1240 523 1400 625 1540 575" stroke="#C94A1A" stroke-width="1.1" opacity="0.09" fill="none" stroke-linecap="round"/>
+  <path d="M-100 668 C 120 608 280 708 480 638 C 680 568 860 688 1060 613 C 1240 546 1400 648 1540 598" stroke="#B5400A" stroke-width="0.8" opacity="0.07" fill="none" stroke-linecap="round"/>
+  <path d="M-100 690 C 120 630 280 730 480 660 C 680 590 860 710 1060 635 C 1240 568 1400 670 1540 620" stroke="#B5400A" stroke-width="0.6" opacity="0.06" fill="none" stroke-linecap="round"/>
+
+  <!-- Wave group 5 — bottom, green sweep -->
+  <path d="M-100 790 C 200 730 500 840 800 770 C 1050 710 1250 810 1540 750" stroke="#2D6A4F" stroke-width="1.4" opacity="0.11" fill="none" stroke-linecap="round"/>
+  <path d="M-100 815 C 200 755 500 865 800 795 C 1050 735 1250 835 1540 775" stroke="#2D6A4F" stroke-width="1.0" opacity="0.08" fill="none" stroke-linecap="round"/>
+  <path d="M-100 838 C 200 778 500 888 800 818 C 1050 758 1250 858 1540 798" stroke="#2D6A4F" stroke-width="0.7" opacity="0.06" fill="none" stroke-linecap="round"/>
+
+  <!-- Cross-diagonal accent waves for layered depth -->
+  <path d="M-100 200 C 300 350 600 150 900 300 C 1150 420 1350 220 1540 320" stroke="#C94A1A" stroke-width="1.0" opacity="0.07" fill="none" stroke-linecap="round"/>
+  <path d="M-100 700 C 250 580 550 720 850 620 C 1100 538 1350 660 1540 580" stroke="#2D6A4F" stroke-width="1.0" opacity="0.07" fill="none" stroke-linecap="round"/>
+  <path d="M 300 -50 C 200 200 500 400 400 650 C 330 820 500 870 600 950" stroke="#1A4F8A" stroke-width="0.9" opacity="0.06" fill="none" stroke-linecap="round"/>
+  <path d="M 900 -50 C 800 200 1100 400 1000 650 C 930 820 1100 870 1200 950" stroke="#C94A1A" stroke-width="0.9" opacity="0.06" fill="none" stroke-linecap="round"/>
+
+</svg>
+
 <div class="wrap">
 
   <!-- Top bar -->
@@ -772,69 +819,13 @@
   <!-- ══ HOME ══ -->
   <div class="screen active" id="screen-home">
 
-    <!-- Abstract hero banner -->
+    <!-- Hero banner -->
     <div class="home-banner">
       <div class="home-banner-text">
         <div class="home-eyebrow">Staff training &mdash; 5 min drill</div>
         <h1 class="home-title">Know what<br>to do when<br>it <em>matters.</em></h1>
         <p class="home-sub">Pick a scenario. You'll see a mix of correct and wrong actions — spot the right ones and learn exactly why the others are dangerous.</p>
       </div>
-      <!-- Abstract SVG line art -->
-      <svg class="home-art" viewBox="0 0 340 320" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <!-- Concentric arcs -->
-        <path d="M280 160 A120 120 0 0 1 160 280" stroke="#C94A1A" stroke-width="1" stroke-dasharray="4 8" opacity="0.35"/>
-        <path d="M300 160 A140 140 0 0 1 160 300" stroke="#C94A1A" stroke-width="0.75" stroke-dasharray="2 10" opacity="0.2"/>
-        <path d="M260 160 A100 100 0 0 1 160 260" stroke="#C94A1A" stroke-width="1.5" opacity="0.18"/>
-
-        <!-- Grid lines -->
-        <line x1="40" y1="0"   x2="40" y2="320" stroke="#1C1810" stroke-width="0.5" opacity="0.07"/>
-        <line x1="100" y1="0"  x2="100" y2="320" stroke="#1C1810" stroke-width="0.5" opacity="0.07"/>
-        <line x1="160" y1="0"  x2="160" y2="320" stroke="#1C1810" stroke-width="0.5" opacity="0.07"/>
-        <line x1="220" y1="0"  x2="220" y2="320" stroke="#1C1810" stroke-width="0.5" opacity="0.07"/>
-        <line x1="280" y1="0"  x2="280" y2="320" stroke="#1C1810" stroke-width="0.5" opacity="0.07"/>
-        <line x1="0" y1="60"   x2="340" y2="60"  stroke="#1C1810" stroke-width="0.5" opacity="0.07"/>
-        <line x1="0" y1="120"  x2="340" y2="120" stroke="#1C1810" stroke-width="0.5" opacity="0.07"/>
-        <line x1="0" y1="180"  x2="340" y2="180" stroke="#1C1810" stroke-width="0.5" opacity="0.07"/>
-        <line x1="0" y1="240"  x2="340" y2="240" stroke="#1C1810" stroke-width="0.5" opacity="0.07"/>
-
-        <!-- Diagonal slashes -->
-        <line x1="180" y1="40"  x2="320" y2="180" stroke="#2D6A4F" stroke-width="1" opacity="0.2"/>
-        <line x1="200" y1="40"  x2="320" y2="160" stroke="#2D6A4F" stroke-width="0.75" opacity="0.14"/>
-        <line x1="160" y1="40"  x2="320" y2="200" stroke="#2D6A4F" stroke-width="0.75" stroke-dasharray="3 6" opacity="0.18"/>
-
-        <!-- Shield outline (abstract) -->
-        <path d="M170 50 L220 70 L220 120 C220 148 170 165 170 165 C170 165 120 148 120 120 L120 70 Z"
-          stroke="#1C1810" stroke-width="1.5" opacity="0.12" fill="none"/>
-        <path d="M170 62 L210 78 L210 118 C210 140 170 154 170 154 C170 154 130 140 130 118 L130 78 Z"
-          stroke="#C94A1A" stroke-width="1" opacity="0.22" fill="none"/>
-
-        <!-- Dot cluster -->
-        <circle cx="60"  cy="60"  r="2.5" fill="#C94A1A" opacity="0.3"/>
-        <circle cx="100" cy="60"  r="1.5" fill="#1C1810" opacity="0.2"/>
-        <circle cx="60"  cy="120" r="1.5" fill="#1C1810" opacity="0.2"/>
-        <circle cx="100" cy="120" r="2.5" fill="#2D6A4F" opacity="0.3"/>
-        <circle cx="60"  cy="180" r="1.5" fill="#1C1810" opacity="0.15"/>
-        <circle cx="160" cy="60"  r="2"   fill="#1A4F8A" opacity="0.25"/>
-        <circle cx="220" cy="60"  r="1.5" fill="#1C1810" opacity="0.15"/>
-        <circle cx="280" cy="60"  r="2.5" fill="#C94A1A" opacity="0.2"/>
-        <circle cx="280" cy="120" r="1.5" fill="#2D6A4F" opacity="0.2"/>
-        <circle cx="220" cy="180" r="2"   fill="#C94A1A" opacity="0.18"/>
-
-        <!-- Flowing curve -->
-        <path d="M20 200 C80 160 140 240 200 180 S300 120 340 100"
-          stroke="#1A4F8A" stroke-width="1.5" opacity="0.2" fill="none"/>
-        <path d="M20 220 C80 180 140 260 200 200 S300 140 340 120"
-          stroke="#1A4F8A" stroke-width="0.75" opacity="0.12" fill="none"/>
-
-        <!-- Corner bracket top-left -->
-        <path d="M20 40 L20 20 L40 20" stroke="#1C1810" stroke-width="1.5" opacity="0.2" fill="none" stroke-linecap="round"/>
-        <!-- Corner bracket bottom-right -->
-        <path d="M320 280 L320 300 L300 300" stroke="#C94A1A" stroke-width="1.5" opacity="0.25" fill="none" stroke-linecap="round"/>
-
-        <!-- Small cross marks -->
-        <path d="M55 240 L65 250 M65 240 L55 250" stroke="#C94A1A" stroke-width="1.2" opacity="0.3" stroke-linecap="round"/>
-        <path d="M290 190 L298 198 M298 190 L290 198" stroke="#2D6A4F" stroke-width="1.2" opacity="0.3" stroke-linecap="round"/>
-      </svg>
     </div>
 
     <!-- Stats strip -->
