@@ -6,39 +6,57 @@
   <title>Incident Response Drill</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --ink:       #1C1810;
-      --ink-mid:   #5A4F42;
-      --ink-soft:  #8C7E70;
-      --paper:     #FAF6F0;
-      --paper-2:   #F0EBE1;
-      --paper-3:   #E5DDD2;
-      --accent:    #C94A1A;
-      --accent-2:  #2D6A4F;
-      --accent-3:  #1A4F8A;
-      --warn:      #B5400A;
-      --radius:    10px;
-      --radius-lg: 16px;
-      --font-body: 'DM Sans', sans-serif;
-      --font-head: 'DM Serif Display', serif;
+      --ink:        #1C1810;
+      --ink-mid:    #5A4F42;
+      --ink-soft:   #8C7E70;
+      --paper:      #FAF6F0;
+      --paper-2:    #F0EBE1;
+      --paper-3:    #E5DDD2;
+      --paper-4:    #D8CFC3;
+      --accent:     #C94A1A;
+      --accent-2:   #2D6A4F;
+      --accent-3:   #1A4F8A;
+      --warn:       #B5400A;
+      --font-body:  'DM Sans', sans-serif;
+      --font-head:  'DM Serif Display', serif;
+      --r:          12px;
+      --r-lg:       20px;
     }
+
+    html { scroll-behavior: smooth; }
 
     body {
       font-family: var(--font-body);
       background: var(--paper);
       color: var(--ink);
       min-height: 100vh;
-      padding: 2rem 1rem 4rem;
+      overflow-x: hidden;
     }
 
-    /* ── Layout ── */
+    /* ── Decorative background pattern ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        radial-gradient(circle at 15% 15%, rgba(201,74,26,0.06) 0%, transparent 50%),
+        radial-gradient(circle at 85% 80%, rgba(45,106,79,0.06) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(26,79,138,0.04) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
     .wrap {
-      max-width: 680px;
+      max-width: 720px;
       margin: 0 auto;
+      padding: 2rem 1.5rem 5rem;
+      position: relative;
+      z-index: 1;
     }
 
     /* ── Top bar ── */
@@ -46,466 +64,633 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 2.5rem;
+      margin-bottom: 3rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--paper-3);
     }
-    .topbar-left {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+    .topbar-left { display: flex; align-items: center; gap: 10px; }
     .shield {
-      width: 36px; height: 36px;
+      width: 38px; height: 38px;
       background: var(--ink);
-      border-radius: 8px;
+      border-radius: 9px;
       display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 2px 8px rgba(28,24,16,0.18);
     }
-    .shield svg { width: 18px; height: 18px; fill: var(--paper); }
-    .brand { font-family: var(--font-head); font-size: 18px; color: var(--ink); }
+    .shield svg { width: 20px; height: 20px; fill: var(--paper); }
+    .brand {
+      font-family: var(--font-head);
+      font-size: 20px;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+    }
     .score-pill {
       font-size: 13px;
       font-weight: 600;
-      padding: 5px 14px;
+      padding: 6px 16px;
       border-radius: 99px;
       background: var(--ink);
       color: var(--paper);
       display: none;
+      letter-spacing: 0.01em;
     }
 
-    /* ── Screen management ── */
+    /* ── Screens ── */
     .screen { display: none; }
     .screen.active { display: block; }
 
-    /* ── Home screen ── */
+    /* ══════════════════════════════════════
+       HOME SCREEN
+    ══════════════════════════════════════ */
     .home-hero {
-      margin-bottom: 2rem;
+      margin-bottom: 2.5rem;
+      position: relative;
     }
     .home-eyebrow {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 600;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--accent);
-      margin-bottom: 10px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .home-eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 24px; height: 2px;
+      background: var(--accent);
+      border-radius: 99px;
     }
     .home-title {
       font-family: var(--font-head);
-      font-size: 38px;
-      line-height: 1.1;
+      font-size: 52px;
+      line-height: 1.05;
       color: var(--ink);
-      margin-bottom: 12px;
+      margin-bottom: 18px;
+      letter-spacing: -0.02em;
     }
     .home-title em { font-style: italic; color: var(--accent); }
     .home-sub {
-      font-size: 15px;
+      font-size: 16px;
       color: var(--ink-mid);
-      line-height: 1.6;
-      max-width: 480px;
+      line-height: 1.65;
+      max-width: 500px;
+    }
+
+    /* decorative rule under hero */
+    .hero-rule {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 2rem 0;
+    }
+    .hero-rule-line { flex: 1; height: 1px; background: var(--paper-3); }
+    .hero-rule-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--paper-4);
     }
 
     /* ── Scenario cards ── */
-    .scenario-label {
+    .section-eyebrow {
       font-size: 11px;
       font-weight: 600;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
       color: var(--ink-soft);
-      margin-bottom: 12px;
+      margin-bottom: 14px;
     }
     .scenario-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-      gap: 12px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
       margin-bottom: 2rem;
     }
+    @media (max-width: 560px) { .scenario-grid { grid-template-columns: 1fr; } }
+
     .sc-card {
       background: var(--paper-2);
       border: 1.5px solid var(--paper-3);
-      border-radius: var(--radius-lg);
-      padding: 18px;
+      border-radius: var(--r-lg);
+      padding: 22px 18px 20px;
       cursor: pointer;
-      transition: border-color 0.15s, transform 0.12s;
+      transition: border-color 0.15s, transform 0.12s, box-shadow 0.15s;
       position: relative;
       overflow: hidden;
     }
-    .sc-card::before {
+    .sc-card::after {
       content: '';
       position: absolute;
-      top: 0; left: 0;
-      width: 4px; height: 100%;
+      bottom: 0; left: 0; right: 0;
+      height: 3px;
       background: var(--paper-3);
       transition: background 0.15s;
     }
-    .sc-card:hover { border-color: var(--ink-soft); transform: translateY(-2px); }
-    .sc-card:hover::before { background: var(--ink-soft); }
-    .sc-card.active { border-color: var(--ink); }
-    .sc-card.active::before { background: var(--accent); }
-    .sc-icon {
-      font-size: 26px;
-      margin-bottom: 10px;
-      display: block;
+    .sc-card:hover {
+      border-color: var(--ink-soft);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(28,24,16,0.08);
     }
-    .sc-name {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--ink);
-      margin-bottom: 4px;
-    }
+    .sc-card:hover::after { background: var(--ink-soft); }
+    .sc-card.active { border-color: var(--ink); box-shadow: 0 8px 24px rgba(28,24,16,0.1); }
+    .sc-card.active::after { background: var(--accent); }
+    .sc-icon { font-size: 32px; margin-bottom: 12px; display: block; }
+    .sc-name { font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 5px; line-height: 1.3; }
     .sc-tag {
       font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
       color: var(--ink-soft);
     }
 
-    /* ── Prompt reveal ── */
+    /* ── Prompt box ── */
     .prompt-box {
       background: var(--ink);
-      border-radius: var(--radius-lg);
-      padding: 20px 22px;
-      margin-bottom: 1.5rem;
+      border-radius: var(--r-lg);
+      padding: 24px 26px;
+      margin-bottom: 2rem;
       display: none;
+      position: relative;
+      overflow: hidden;
+    }
+    .prompt-box::before {
+      content: '"';
+      position: absolute;
+      top: -20px; right: 20px;
+      font-family: var(--font-head);
+      font-size: 160px;
+      color: rgba(255,255,255,0.04);
+      line-height: 1;
+      pointer-events: none;
     }
     .prompt-box.visible { display: block; }
     .prompt-kicker {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: var(--paper-3);
-      margin-bottom: 8px;
+      color: rgba(240,235,225,0.5);
+      margin-bottom: 10px;
     }
     .prompt-text {
-      font-size: 16px;
-      color: var(--paper);
-      line-height: 1.6;
       font-family: var(--font-head);
       font-style: italic;
+      font-size: 20px;
+      color: var(--paper);
+      line-height: 1.55;
+      position: relative;
+      z-index: 1;
     }
 
     .btn-start {
       display: none;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
       background: var(--accent);
       color: #fff;
       border: none;
-      border-radius: var(--radius);
-      padding: 13px 28px;
+      border-radius: var(--r);
+      padding: 16px 32px;
       font-size: 15px;
       font-weight: 600;
       font-family: var(--font-body);
       cursor: pointer;
-      transition: background 0.15s, transform 0.1s;
+      transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
+      box-shadow: 0 4px 14px rgba(201,74,26,0.3);
     }
     .btn-start.visible { display: flex; }
-    .btn-start:hover { background: var(--warn); }
-    .btn-start:active { transform: scale(0.98); }
+    .btn-start:hover { background: var(--warn); box-shadow: 0 6px 20px rgba(201,74,26,0.35); }
+    .btn-start:active { transform: scale(0.97); }
 
-    /* ── Drill screen ── */
-    .drill-header {
+    /* ══════════════════════════════════════
+       DRILL SCREEN
+    ══════════════════════════════════════ */
+
+    /* big decorative step counter */
+    .step-counter {
+      font-family: var(--font-head);
+      font-size: 100px;
+      line-height: 1;
+      color: var(--paper-3);
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      pointer-events: none;
+      user-select: none;
+      letter-spacing: -0.04em;
+    }
+
+    .drill-top {
+      position: relative;
+      background: var(--paper-2);
+      border: 1px solid var(--paper-3);
+      border-radius: var(--r-lg);
+      padding: 28px 28px 24px;
       margin-bottom: 1.75rem;
+      overflow: hidden;
+    }
+    /* subtle grid texture */
+    .drill-top::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--paper-3) 1px, transparent 1px),
+        linear-gradient(90deg, var(--paper-3) 1px, transparent 1px);
+      background-size: 32px 32px;
+      opacity: 0.35;
+      pointer-events: none;
     }
     .drill-eyebrow {
       font-size: 11px;
       font-weight: 600;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
       color: var(--ink-soft);
-      margin-bottom: 6px;
+      margin-bottom: 10px;
+      position: relative;
     }
-    .drill-title {
+    .drill-question {
       font-family: var(--font-head);
-      font-size: 26px;
+      font-size: 30px;
+      line-height: 1.2;
       color: var(--ink);
-      margin-bottom: 8px;
+      margin-bottom: 14px;
+      position: relative;
+      max-width: 520px;
     }
-    .drill-prompt {
-      font-size: 14px;
+    .drill-scenario-prompt {
+      font-size: 13px;
       color: var(--ink-mid);
       line-height: 1.55;
-      background: var(--paper-2);
+      background: rgba(255,255,255,0.55);
       border-left: 3px solid var(--accent);
-      padding: 10px 14px;
-      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 9px 13px;
+      border-radius: 0 8px 8px 0;
+      position: relative;
     }
 
-    /* ── Progress bar ── */
-    .progress-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+    /* ── Progress ── */
+    .progress-wrap {
       margin-bottom: 1.5rem;
     }
-    .progress-bg {
-      flex: 1;
-      height: 5px;
+    .progress-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 7px;
+    }
+    .progress-steps {
+      display: flex;
+      gap: 5px;
+    }
+    .prog-dot {
+      width: 28px; height: 6px;
+      border-radius: 99px;
       background: var(--paper-3);
-      border-radius: 99px;
-      overflow: hidden;
+      transition: background 0.3s;
     }
-    .progress-fill {
-      height: 100%;
-      background: var(--accent-2);
-      border-radius: 99px;
-      transition: width 0.4s ease;
-    }
-    .progress-label {
+    .prog-dot.done    { background: var(--accent-2); }
+    .prog-dot.current { background: var(--accent); }
+    .progress-pct {
       font-size: 12px;
       font-weight: 600;
       color: var(--ink-soft);
-      white-space: nowrap;
     }
 
-    /* ── Score live ── */
-    .live-score {
+    /* ── Live score strip ── */
+    .score-strip {
       display: flex;
       gap: 10px;
-      margin-bottom: 1.5rem;
+      margin-bottom: 2rem;
     }
-    .ls-box {
+    .ss-box {
       flex: 1;
       background: var(--paper-2);
       border: 1px solid var(--paper-3);
-      border-radius: var(--radius);
-      padding: 10px 14px;
+      border-radius: var(--r);
+      padding: 12px 10px 10px;
       text-align: center;
+      position: relative;
+      overflow: hidden;
     }
-    .ls-val {
+    .ss-box::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+    .ss-box.ss-c::before { background: var(--accent-2); }
+    .ss-box.ss-w::before { background: var(--accent); }
+    .ss-box.ss-p::before { background: var(--accent-3); }
+    .ss-val {
       font-family: var(--font-head);
-      font-size: 22px;
+      font-size: 26px;
       color: var(--ink);
+      line-height: 1;
+      margin-bottom: 4px;
     }
-    .ls-val.green { color: var(--accent-2); }
-    .ls-val.red   { color: var(--accent); }
-    .ls-key {
+    .ss-val.green { color: var(--accent-2); }
+    .ss-val.red   { color: var(--accent); }
+    .ss-val.blue  { color: var(--accent-3); }
+    .ss-key {
       font-size: 10px;
       font-weight: 600;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.07em;
       text-transform: uppercase;
       color: var(--ink-soft);
-      margin-top: 2px;
     }
 
     /* ── Options ── */
-    .options-label {
+    .options-heading {
       font-size: 12px;
       font-weight: 600;
-      color: var(--ink-soft);
-      letter-spacing: 0.05em;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
-      margin-bottom: 10px;
+      color: var(--ink-soft);
+      margin-bottom: 12px;
     }
     .options-list {
       display: flex;
       flex-direction: column;
-      gap: 9px;
-      margin-bottom: 1.5rem;
+      gap: 12px;
+      margin-bottom: 1.75rem;
     }
     .opt {
       display: flex;
       align-items: flex-start;
-      gap: 12px;
-      padding: 13px 15px;
-      border-radius: var(--radius);
-      border: 1.5px solid var(--paper-3);
+      gap: 14px;
+      padding: 18px 20px;
+      border-radius: var(--r-lg);
+      border: 2px solid var(--paper-3);
       background: var(--paper-2);
       cursor: pointer;
-      transition: border-color 0.12s, background 0.12s;
+      transition: border-color 0.12s, background 0.12s, transform 0.1s, box-shadow 0.12s;
       user-select: none;
+      position: relative;
     }
     .opt:hover:not(.locked) {
       border-color: var(--ink-soft);
       background: var(--paper-3);
+      transform: translateX(3px);
+      box-shadow: 0 4px 14px rgba(28,24,16,0.07);
     }
     .opt.locked { cursor: default; }
     .opt.correct {
       border-color: var(--accent-2);
       background: #edf7f1;
+      box-shadow: 0 4px 14px rgba(45,106,79,0.12);
     }
     .opt.wrong {
       border-color: var(--accent);
       background: #fdf0eb;
+      box-shadow: 0 4px 14px rgba(201,74,26,0.12);
     }
     .opt.missed {
-      border-color: var(--ink-soft);
+      border-color: var(--paper-4);
       background: var(--paper-2);
-      opacity: 0.6;
+      opacity: 0.55;
     }
-    .opt-dot {
-      width: 20px; height: 20px;
-      min-width: 20px;
-      border-radius: 50%;
-      border: 2px solid var(--paper-3);
-      background: var(--paper);
+    .opt-badge {
+      width: 28px; height: 28px;
+      min-width: 28px;
+      border-radius: 8px;
+      background: var(--paper-3);
       display: flex; align-items: center; justify-content: center;
-      margin-top: 1px;
-      font-size: 11px;
+      font-size: 12px;
       font-weight: 700;
+      color: var(--ink-mid);
       transition: all 0.12s;
+      margin-top: 1px;
     }
-    .opt.correct .opt-dot { background: var(--accent-2); border-color: var(--accent-2); color: #fff; }
-    .opt.wrong   .opt-dot { background: var(--accent);   border-color: var(--accent);   color: #fff; }
-    .opt.missed  .opt-dot { background: var(--ink-soft); border-color: var(--ink-soft); color: #fff; }
+    .opt.correct .opt-badge { background: var(--accent-2); color: #fff; }
+    .opt.wrong   .opt-badge { background: var(--accent);   color: #fff; }
+    .opt.missed  .opt-badge { background: var(--paper-4);  color: var(--ink-soft); }
     .opt-text {
-      font-size: 14px;
+      font-size: 15px;
       color: var(--ink);
-      line-height: 1.5;
+      line-height: 1.55;
+      font-weight: 500;
     }
     .opt.correct .opt-text { color: #1a4a30; }
     .opt.wrong   .opt-text { color: #7a2010; }
 
-    /* ── Feedback toast ── */
+    /* ── Feedback ── */
     .feedback {
-      border-radius: var(--radius);
-      padding: 11px 14px;
-      font-size: 13px;
-      line-height: 1.5;
-      margin-bottom: 1rem;
+      border-radius: var(--r);
+      padding: 14px 16px;
+      font-size: 14px;
+      line-height: 1.55;
+      margin-bottom: 1.25rem;
       display: none;
+      font-weight: 500;
     }
-    .feedback.visible { display: block; }
+    .feedback.visible { display: flex; gap: 10px; align-items: flex-start; }
+    .feedback-icon { font-size: 18px; flex-shrink: 0; margin-top: -1px; }
     .feedback.good { background: #edf7f1; color: #1a4a30; border: 1px solid #b4ddc7; }
     .feedback.bad  { background: #fdf0eb; color: #7a2010; border: 1px solid #f4b8a0; }
 
-    /* ── Nav buttons ── */
-    .nav-row {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
+    /* ── Nav ── */
+    .nav-row { display: flex; gap: 10px; flex-wrap: wrap; }
     .btn {
       display: inline-flex;
       align-items: center;
-      gap: 7px;
-      padding: 11px 22px;
-      border-radius: var(--radius);
+      gap: 8px;
+      padding: 13px 26px;
+      border-radius: var(--r);
       font-size: 14px;
       font-weight: 600;
       font-family: var(--font-body);
       cursor: pointer;
-      transition: background 0.12s, transform 0.1s;
+      transition: background 0.12s, transform 0.1s, box-shadow 0.12s;
       border: none;
     }
     .btn:active { transform: scale(0.97); }
-    .btn-ink  { background: var(--ink); color: var(--paper); }
-    .btn-ink:hover { background: #2e2820; }
-    .btn-ghost { background: var(--paper-3); color: var(--ink); }
-    .btn-ghost:hover { background: var(--paper-3); filter: brightness(0.95); }
-    .btn-green { background: var(--accent-2); color: #fff; }
-    .btn-green:hover { background: #245a42; }
+    .btn-ink {
+      background: var(--ink);
+      color: var(--paper);
+      box-shadow: 0 2px 8px rgba(28,24,16,0.2);
+    }
+    .btn-ink:hover { background: #2e2820; box-shadow: 0 4px 14px rgba(28,24,16,0.25); }
+    .btn-ghost {
+      background: var(--paper-3);
+      color: var(--ink);
+    }
+    .btn-ghost:hover { background: var(--paper-4); }
 
-    /* ── Results screen ── */
-    .result-hero {
+    /* ══════════════════════════════════════
+       RESULTS SCREEN
+    ══════════════════════════════════════ */
+    .results-hero {
+      background: var(--ink);
+      border-radius: var(--r-lg);
+      padding: 36px 32px 32px;
+      margin-bottom: 2rem;
       text-align: center;
-      padding: 2rem 0 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .results-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(circle at 20% 50%, rgba(201,74,26,0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 50%, rgba(45,106,79,0.15) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .results-hero::after {
+      content: '★';
+      position: absolute;
+      font-size: 200px;
+      color: rgba(255,255,255,0.03);
+      top: -40px;
+      right: -20px;
+      font-family: var(--font-head);
+      pointer-events: none;
     }
     .result-ring-wrap {
       display: flex;
       justify-content: center;
-      margin-bottom: 1rem;
+      margin-bottom: 1.25rem;
+      position: relative;
+      z-index: 1;
     }
     .result-title {
       font-family: var(--font-head);
-      font-size: 30px;
-      color: var(--ink);
-      margin-bottom: 6px;
+      font-size: 34px;
+      color: var(--paper);
+      margin-bottom: 8px;
+      position: relative;
+      z-index: 1;
     }
     .result-sub {
       font-size: 15px;
-      color: var(--ink-mid);
+      color: rgba(240,235,225,0.65);
+      position: relative;
+      z-index: 1;
     }
 
     .result-stats {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin: 1.5rem 0;
+      gap: 12px;
+      margin-bottom: 2rem;
     }
     .stat-box {
       background: var(--paper-2);
       border: 1px solid var(--paper-3);
-      border-radius: var(--radius);
-      padding: 14px 10px;
+      border-radius: var(--r);
+      padding: 18px 10px;
       text-align: center;
+      position: relative;
+      overflow: hidden;
     }
+    .stat-box::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+    .stat-box:nth-child(1)::before { background: var(--accent-2); }
+    .stat-box:nth-child(2)::before { background: var(--accent); }
+    .stat-box:nth-child(3)::before { background: var(--accent-3); }
     .stat-val {
       font-family: var(--font-head);
-      font-size: 28px;
+      font-size: 36px;
       color: var(--ink);
+      line-height: 1;
+      margin-bottom: 5px;
     }
     .stat-key {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      color: var(--ink-soft);
-      margin-top: 3px;
-    }
-
-    .result-breakdown {
-      margin-bottom: 1.5rem;
-    }
-    .breakdown-label {
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 600;
       letter-spacing: 0.07em;
       text-transform: uppercase;
       color: var(--ink-soft);
-      margin-bottom: 10px;
+    }
+
+    .breakdown-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .breakdown-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--paper-3);
     }
     .breakdown-row {
       display: flex;
       align-items: flex-start;
-      gap: 10px;
-      padding: 10px 12px;
-      border-radius: 8px;
-      font-size: 13px;
-      line-height: 1.4;
-      margin-bottom: 7px;
+      gap: 12px;
+      padding: 13px 15px;
+      border-radius: var(--r);
+      font-size: 14px;
+      line-height: 1.5;
+      margin-bottom: 8px;
     }
-    .breakdown-row.c { background: #edf7f1; color: #1a4a30; }
-    .breakdown-row.w { background: #fdf0eb; color: #7a2010; }
-    .breakdown-dot {
-      width: 18px; height: 18px; min-width: 18px;
-      border-radius: 50%;
+    .breakdown-row.c { background: #edf7f1; color: #1a4a30; border: 1px solid #b4ddc7; }
+    .breakdown-row.w { background: #fdf0eb; color: #7a2010; border: 1px solid #f4b8a0; }
+    .bd-dot {
+      width: 22px; height: 22px; min-width: 22px;
+      border-radius: 6px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 700;
       margin-top: 1px;
     }
-    .breakdown-row.c .breakdown-dot { background: var(--accent-2); color: #fff; }
-    .breakdown-row.w .breakdown-dot { background: var(--accent);   color: #fff; }
+    .breakdown-row.c .bd-dot { background: var(--accent-2); color: #fff; }
+    .breakdown-row.w .bd-dot { background: var(--accent);   color: #fff; }
 
     .tip-box {
       background: var(--ink);
-      border-radius: var(--radius-lg);
-      padding: 18px 20px;
-      margin-bottom: 1.5rem;
+      border-radius: var(--r-lg);
+      padding: 22px 24px;
+      margin: 1.75rem 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .tip-box::before {
+      content: '💡';
+      position: absolute;
+      font-size: 100px;
+      right: -10px;
+      top: -10px;
+      opacity: 0.07;
+      pointer-events: none;
     }
     .tip-kicker {
       font-size: 10px;
       font-weight: 700;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: var(--paper-3);
-      margin-bottom: 6px;
+      color: rgba(240,235,225,0.5);
+      margin-bottom: 8px;
     }
     .tip-text {
-      font-size: 14px;
+      font-size: 15px;
       color: var(--paper);
-      line-height: 1.6;
-    }
-
-    /* ── Divider ── */
-    .divider {
-      border: none;
-      border-top: 1px solid var(--paper-3);
-      margin: 1.5rem 0;
+      line-height: 1.65;
+      position: relative;
+      z-index: 1;
     }
 
     /* ── Responsive ── */
     @media (max-width: 480px) {
-      .home-title { font-size: 28px; }
-      .scenario-grid { grid-template-columns: 1fr 1fr; }
-      .result-stats { grid-template-columns: repeat(3, 1fr); }
+      .home-title { font-size: 36px; }
+      .drill-question { font-size: 22px; }
+      .step-counter { font-size: 70px; }
     }
   </style>
 </head>
@@ -516,22 +701,30 @@
   <div class="topbar">
     <div class="topbar-left">
       <div class="shield">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L4 6v6c0 5.25 3.5 10.15 8 11.35C16.5 22.15 20 17.25 20 12V6l-8-4z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2L4 6v6c0 5.25 3.5 10.15 8 11.35C16.5 22.15 20 17.25 20 12V6l-8-4z"/></svg>
       </div>
       <span class="brand">IR Drill</span>
     </div>
     <div class="score-pill" id="score-pill">0 pts</div>
   </div>
 
-  <!-- ══ HOME SCREEN ══ -->
+  <!-- ══ HOME ══ -->
   <div class="screen active" id="screen-home">
     <div class="home-hero">
       <div class="home-eyebrow">Staff training &mdash; 5 min drill</div>
-      <h1 class="home-title">Know what to do<br>when it <em>matters.</em></h1>
-      <p class="home-sub">Pick a scenario below. You'll see a mix of correct and wrong actions — spot the right ones and learn why the others are a bad idea.</p>
+      <h1 class="home-title">Know what<br>to do when<br>it <em>matters.</em></h1>
+      <p class="home-sub">Pick a scenario. You'll see a mix of correct and wrong actions — spot the right ones and learn exactly why the others are dangerous.</p>
     </div>
 
-    <div class="scenario-label">Choose your scenario</div>
+    <div class="hero-rule">
+      <div class="hero-rule-line"></div>
+      <div class="hero-rule-dot"></div>
+      <div class="hero-rule-line"></div>
+      <div class="hero-rule-dot"></div>
+      <div class="hero-rule-line"></div>
+    </div>
+
+    <div class="section-eyebrow">Choose your scenario</div>
     <div class="scenario-grid">
       <div class="sc-card" onclick="pickScenario('login', this)">
         <span class="sc-icon">⚠️</span>
@@ -561,36 +754,40 @@
     </button>
   </div>
 
-  <!-- ══ DRILL SCREEN ══ -->
+  <!-- ══ DRILL ══ -->
   <div class="screen" id="screen-drill">
-    <div class="drill-header">
+
+    <div class="drill-top">
+      <div class="step-counter" id="step-counter">01</div>
       <div class="drill-eyebrow" id="drill-eyebrow"></div>
-      <div class="drill-title" id="drill-title"></div>
-      <div class="drill-prompt" id="drill-prompt"></div>
+      <div class="drill-question" id="drill-question"></div>
+      <div class="drill-scenario-prompt" id="drill-scenario-prompt"></div>
     </div>
 
-    <div class="progress-row">
-      <div class="progress-bg"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
-      <div class="progress-label" id="progress-label">0 / 0</div>
-    </div>
-
-    <div class="live-score">
-      <div class="ls-box">
-        <div class="ls-val green" id="ls-correct">0</div>
-        <div class="ls-key">Correct</div>
-      </div>
-      <div class="ls-box">
-        <div class="ls-val red" id="ls-wrong">0</div>
-        <div class="ls-key">Wrong</div>
-      </div>
-      <div class="ls-box">
-        <div class="ls-val" id="ls-score">0</div>
-        <div class="ls-key">Points</div>
+    <div class="progress-wrap">
+      <div class="progress-top">
+        <div class="progress-steps" id="progress-steps"></div>
+        <div class="progress-pct" id="progress-pct">0%</div>
       </div>
     </div>
 
-    <div class="options-label">What should you do?</div>
-    <div class="feedback" id="feedback"></div>
+    <div class="score-strip">
+      <div class="ss-box ss-c">
+        <div class="ss-val green" id="ls-correct">0</div>
+        <div class="ss-key">Correct</div>
+      </div>
+      <div class="ss-box ss-w">
+        <div class="ss-val red" id="ls-wrong">0</div>
+        <div class="ss-key">Wrong</div>
+      </div>
+      <div class="ss-box ss-p">
+        <div class="ss-val blue" id="ls-score">0</div>
+        <div class="ss-key">Points</div>
+      </div>
+    </div>
+
+    <div class="options-heading">What should you do?</div>
+    <div class="feedback" id="feedback"><span class="feedback-icon" id="feedback-icon"></span><span id="feedback-text"></span></div>
     <div class="options-list" id="options-list"></div>
 
     <div class="nav-row" id="nav-row" style="display:none">
@@ -598,20 +795,21 @@
     </div>
   </div>
 
-  <!-- ══ RESULTS SCREEN ══ -->
+  <!-- ══ RESULTS ══ -->
   <div class="screen" id="screen-results">
-    <div class="result-hero">
+
+    <div class="results-hero">
       <div class="result-ring-wrap">
-        <svg width="110" height="110" viewBox="0 0 110 110" id="result-ring">
-          <circle cx="55" cy="55" r="44" fill="none" stroke="#e5ddd2" stroke-width="8"/>
-          <circle cx="55" cy="55" r="44" fill="none" stroke="#2D6A4F" stroke-width="8"
+        <svg width="120" height="120" viewBox="0 0 120 120">
+          <circle cx="60" cy="60" r="48" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="8"/>
+          <circle cx="60" cy="60" r="48" fill="none" stroke="#2D6A4F" stroke-width="8"
             stroke-dasharray="0 999" stroke-linecap="round"
-            transform="rotate(-90 55 55)" id="ring-arc"/>
-          <text x="55" y="60" text-anchor="middle" font-size="20" font-weight="700"
-            fill="#1C1810" font-family="DM Serif Display, serif" id="ring-label">0%</text>
+            transform="rotate(-90 60 60)" id="ring-arc"/>
+          <text x="60" y="66" text-anchor="middle" font-size="22" font-weight="700"
+            fill="white" font-family="DM Serif Display, serif" id="ring-label">0%</text>
         </svg>
       </div>
-      <div class="result-title" id="result-title">Nice work</div>
+      <div class="result-title" id="result-title">—</div>
       <div class="result-sub" id="result-sub"></div>
     </div>
 
@@ -625,59 +823,56 @@
         <div class="stat-key">Wrong</div>
       </div>
       <div class="stat-box">
-        <div class="stat-val" id="stat-score">0</div>
+        <div class="stat-val" id="stat-score" style="color:#1A4F8A">0</div>
         <div class="stat-key">Points</div>
       </div>
     </div>
 
-    <div class="result-breakdown">
-      <div class="breakdown-label">Full review</div>
-      <div id="breakdown-list"></div>
-    </div>
+    <div class="breakdown-label">Full review</div>
+    <div id="breakdown-list"></div>
 
     <div class="tip-box" id="tip-box">
-      <div class="tip-kicker">Remember this</div>
+      <div class="tip-kicker">Key takeaway</div>
       <div class="tip-text" id="tip-text"></div>
     </div>
 
     <div class="nav-row">
-      <button class="btn btn-ink" onclick="goHome()">Try another →</button>
+      <button class="btn btn-ink" onclick="goHome()">Try another scenario →</button>
     </div>
   </div>
 
-</div><!-- /wrap -->
+</div>
 
 <script>
-  /* ── DATA ── */
   const SCENARIOS = {
     login: {
       name: 'Suspicious login alert',
       tag: 'Account security',
       prompt: 'You get an email alert: your account was accessed from an unknown location. The email has a "Verify Now" button.',
-      tip: 'Never click links in security alert emails. Always go directly to the site by typing the URL yourself. Clicking that link is exactly what attackers want.',
+      tip: 'Never click links in security alert emails. Always go directly to the site by typing the URL yourself. That link is exactly what attackers want you to click.',
       steps: [
         {
-          question: 'Your first move?',
+          question: 'What is your very first move?',
           options: [
-            { text: 'Click the "Verify Now" button in the email to check your account.', correct: false, why: 'That link could be phishing. Clicking it hands your credentials to an attacker.' },
+            { text: 'Click "Verify Now" in the email to check your account right away.', correct: false, why: 'That link could be a phishing trap. Clicking it hands your credentials directly to an attacker.' },
             { text: 'Open your browser and go directly to the site by typing the URL yourself.', correct: true, why: 'Correct. Always verify by navigating directly — never through an email link.' },
-            { text: 'Ignore it — probably spam.', correct: false, why: 'A real login from an unknown location is a genuine security event. Never ignore it.' },
+            { text: 'Ignore it for now — it\'s probably just spam.', correct: false, why: 'A login from an unknown location is a real security event. Ignoring it lets an attacker stay in your account.' },
           ]
         },
         {
-          question: 'You confirm it was an unauthorized login. Now what?',
+          question: 'You confirm an unauthorized login. Now what?',
           options: [
-            { text: 'Tell IT/security right away using your company\'s official reporting channel.', correct: true, why: 'Correct. Report immediately — the sooner IT knows, the faster they can act.' },
-            { text: 'Change your password and assume the problem is solved.', correct: false, why: 'Self-remediation without IT guidance can destroy evidence and miss deeper issues.' },
-            { text: 'Post about it in the team Slack to warn colleagues.', correct: false, why: 'Informal channels aren\'t the right way. Use the official IT/security process.' },
+            { text: 'Report it to IT/security right away using your company\'s official channel.', correct: true, why: 'Correct. Report immediately — the sooner IT knows, the faster they can lock things down.' },
+            { text: 'Change your password and assume the problem is solved.', correct: false, why: 'Self-remediation without IT guidance can destroy evidence and miss deeper compromise.' },
+            { text: 'Post a heads-up in the team Slack to warn colleagues.', correct: false, why: 'Informal channels aren\'t the right process. Use the official IT/security reporting path.' },
           ]
         },
         {
-          question: 'What should you keep?',
+          question: 'What should you do with the alert email?',
           options: [
-            { text: 'Delete the alert email — you\'ve already reported it so it\'s useless.', correct: false, why: 'Evidence must be preserved. IT may need the original email headers for investigation.' },
-            { text: 'Take a screenshot and keep the original email untouched.', correct: true, why: 'Correct. Document everything and preserve the original — never delete anything.' },
-            { text: 'Forward it to your personal email just in case.', correct: false, why: 'Forwarding alert emails to personal accounts can further compromise security.' },
+            { text: 'Delete it — you\'ve already reported, so it\'s useless now.', correct: false, why: 'Evidence must be preserved. IT may need the original email headers to trace the attack.' },
+            { text: 'Take a screenshot and leave the original email completely untouched.', correct: true, why: 'Correct. Document everything and preserve the original — deleting evidence hurts the investigation.' },
+            { text: 'Forward it to your personal email as a personal backup.', correct: false, why: 'Forwarding alert emails to personal accounts can create additional security exposure.' },
           ]
         }
       ]
@@ -685,31 +880,31 @@
     phishing: {
       name: 'Phishing link clicked',
       tag: 'Email threat',
-      prompt: 'An email from "HR" asks you to update your direct deposit info. You clicked the link before realising it looked off.',
-      tip: 'The moment you click a suspicious link, isolate first — then report. Speed matters. Every second the device stays connected, potential malware has more time to spread or exfiltrate data.',
+      prompt: 'An email from "HR" asked you to update your direct deposit info. You clicked the link before realizing it looked suspicious.',
+      tip: 'The moment you click a suspicious link, isolate first — then report. Every second the device stays connected, malware has more time to spread or steal data.',
       steps: [
         {
-          question: 'You just clicked. What do you do right now?',
+          question: 'You just clicked the link. What do you do right now?',
           options: [
-            { text: 'Disconnect from Wi-Fi and unplug the network cable immediately.', correct: true, why: 'Correct. Isolating the device stops any potential malware from spreading across the network.' },
-            { text: 'Run a quick antivirus scan to check if anything installed.', correct: false, why: 'Don\'t self-remediate. You could interfere with forensic evidence. Let IT handle it.' },
-            { text: 'Close the browser tab — that should be enough.', correct: false, why: 'Closing the tab does nothing if something already downloaded or ran in the background.' },
+            { text: 'Disconnect from Wi-Fi and unplug the network cable immediately.', correct: true, why: 'Correct. Isolating the device cuts off any malware from spreading across your network.' },
+            { text: 'Run a quick antivirus scan to check if anything installed.', correct: false, why: 'Don\'t self-remediate. You could destroy forensic evidence. Let IT handle the investigation.' },
+            { text: 'Close the browser tab — that should stop anything from happening.', correct: false, why: 'Closing the tab does nothing if something already ran or downloaded in the background.' },
           ]
         },
         {
-          question: 'Device is isolated. What next?',
+          question: 'Device is isolated. What is your next step?',
           options: [
-            { text: 'Wait and see if anything strange happens before bothering IT.', correct: false, why: 'Never wait. Incidents escalate fast. Early reporting limits the damage significantly.' },
-            { text: 'Report to IT/security immediately using your company\'s correct channel.', correct: true, why: 'Correct. Report right away — include what you clicked, when, and what happened after.' },
-            { text: 'Log into your accounts from your personal phone to check if anything was stolen.', correct: false, why: 'Using personal devices for sensitive logins creates more risk, not less.' },
+            { text: 'Wait and see if anything strange happens before contacting IT.', correct: false, why: 'Never wait. Incidents escalate fast. Early reporting is the single biggest factor in limiting damage.' },
+            { text: 'Report to IT/security immediately — tell them what you clicked and when.', correct: true, why: 'Correct. Report right away with as much detail as you have. Speed matters enormously here.' },
+            { text: 'Log into your accounts from your personal phone to check if anything was stolen.', correct: false, why: 'Using personal devices for sensitive logins creates new risk on top of existing compromise.' },
           ]
         },
         {
-          question: 'IT asks for evidence. What do you have ready?',
+          question: 'IT asks you for evidence. What should you have ready?',
           options: [
-            { text: 'Nothing — you deleted the email so it wouldn\'t spread.', correct: false, why: 'Deleting evidence makes investigation much harder. Always preserve everything.' },
-            { text: 'The email, the link URL you clicked, the time it happened, and what you saw on screen.', correct: true, why: 'Correct. Detailed documentation helps IT investigate and contain the incident faster.' },
-            { text: 'Just your best guess at what the link said.', correct: false, why: 'Guessing isn\'t enough. Document specifics — screenshots, exact URLs, timestamps.' },
+            { text: 'Nothing — you deleted the email so it wouldn\'t spread further.', correct: false, why: 'Deleting evidence makes investigation much harder. Always preserve everything.' },
+            { text: 'The email, the exact link URL, the time it happened, and what appeared on screen.', correct: true, why: 'Correct. Detailed documentation helps IT investigate and contain the incident much faster.' },
+            { text: 'Your best guess at what the link said — you didn\'t write it down.', correct: false, why: 'Guessing is not enough. Exact URLs, timestamps, and screenshots are what investigators need.' },
           ]
         }
       ]
@@ -717,31 +912,31 @@
     device: {
       name: 'Lost or stolen device',
       tag: 'Physical security',
-      prompt: 'You finish a meeting and realize your work laptop isn\'t where you left it. You\'re not sure if it\'s stolen or misplaced.',
-      tip: 'Time is critical with lost devices. The faster IT knows, the faster they can remotely lock or wipe it. Do not wait until you\'re sure it\'s gone — report the moment you suspect it.',
+      prompt: 'You finish a meeting and realize your work laptop is no longer where you left it. You\'re not sure if it was stolen or just misplaced.',
+      tip: 'Time is critical with lost devices. The faster IT knows, the faster they can remotely lock or wipe it before anyone accesses your data. Report first, search second.',
       steps: [
         {
           question: 'You notice the laptop is missing. First step?',
           options: [
-            { text: 'Spend 30 minutes searching every room before telling anyone.', correct: false, why: 'Every minute of delay is a minute a bad actor could access your data. Report first.' },
-            { text: 'Report it to IT/security immediately — even if it might just be misplaced.', correct: true, why: 'Correct. Report right away. IT can put a hold on the device while you look. No harm done if it turns up.' },
-            { text: 'Log into the device remotely to check what\'s on it.', correct: false, why: 'Remote access confirms it\'s online — but IT should handle any remote action, not you.' },
+            { text: 'Spend 30 minutes searching every room before telling anyone.', correct: false, why: 'Every minute of delay is a minute a bad actor could be accessing your data. Report first, search second.' },
+            { text: 'Report it to IT/security immediately — even if it might just be misplaced.', correct: true, why: 'Correct. Report right away. IT can put a remote hold on the device while you keep looking.' },
+            { text: 'Log into the device remotely yourself to see if it is still online.', correct: false, why: 'Remote access is IT\'s job, not yours. Attempting it yourself can interfere with the response.' },
           ]
         },
         {
           question: 'IT asks what you know. What do you tell them?',
           options: [
-            { text: 'Last known location, the time you last had it, and anything unusual you noticed.', correct: true, why: 'Correct. Specific details help IT and security act fast and file an accurate report.' },
-            { text: 'Just that it\'s missing — you don\'t want to waste their time with details.', correct: false, why: 'Details matter. Location, time, and context can be critical for recovery and investigation.' },
-            { text: 'Nothing yet — you\'ll wait until you\'re sure it\'s actually gone.', correct: false, why: 'Report immediately with what you know. Don\'t wait for certainty.' },
+            { text: 'Last known location, time you last had it, and anything unusual you noticed.', correct: true, why: 'Correct. Specific details help IT act fast and file an accurate report for recovery.' },
+            { text: 'Just that it\'s missing — you don\'t want to waste their time with details.', correct: false, why: 'Details matter enormously. Location, time, and context can be critical for recovery and investigation.' },
+            { text: 'Nothing yet — you\'ll wait until you\'re absolutely sure it\'s gone.', correct: false, why: 'Report immediately with what you know. Waiting for certainty costs precious response time.' },
           ]
         },
         {
-          question: 'You need to keep working. What\'s acceptable?',
+          question: 'You need to keep working. What is acceptable?',
           options: [
-            { text: 'Log into your work email and files from your personal laptop to stay productive.', correct: false, why: 'Using unmanaged personal devices for work access creates a new security gap.' },
-            { text: 'Do a remote wipe of the device yourself using the IT portal.', correct: false, why: 'Only trained IT staff should perform remote wipes. DIY attempts can go wrong.' },
-            { text: 'Wait for IT guidance before accessing any work systems on another device.', correct: true, why: 'Correct. IT will provision a safe way for you to continue working without creating new risks.' },
+            { text: 'Log into work email and files from your personal laptop to stay productive.', correct: false, why: 'Using an unmanaged personal device for work access creates a new, uncontrolled security gap.' },
+            { text: 'Do a remote wipe yourself using the self-service IT portal.', correct: false, why: 'Only trained IT staff should perform remote wipes. DIY attempts can go wrong and destroy data.' },
+            { text: 'Wait for IT guidance before accessing any work systems on another device.', correct: true, why: 'Correct. IT will provide a safe, controlled way for you to continue without creating new risks.' },
           ]
         }
       ]
@@ -749,21 +944,16 @@
   };
 
   /* ── STATE ── */
-  let scenario = null;
-  let stepIndex = 0;
-  let score = 0;
-  let correctCount = 0;
-  let wrongCount = 0;
-  let answered = false;
-  let history = [];
+  let scenario = null, stepIndex = 0, score = 0;
+  let correctCount = 0, wrongCount = 0;
+  let answered = false, history = [];
 
   /* ── HOME ── */
   function pickScenario(id, el) {
     scenario = id;
     document.querySelectorAll('.sc-card').forEach(c => c.classList.remove('active'));
     el.classList.add('active');
-    const s = SCENARIOS[id];
-    document.getElementById('home-prompt-text').textContent = s.prompt;
+    document.getElementById('home-prompt-text').textContent = SCENARIOS[id].prompt;
     document.getElementById('home-prompt').classList.add('visible');
     const btn = document.getElementById('btn-start');
     btn.classList.add('visible');
@@ -771,16 +961,35 @@
 
   function startDrill() {
     if (!scenario) return;
-    stepIndex = 0;
-    score = 0;
-    correctCount = 0;
-    wrongCount = 0;
-    history = [];
-    answered = false;
+    stepIndex = 0; score = 0; correctCount = 0; wrongCount = 0;
+    history = []; answered = false;
     document.getElementById('score-pill').style.display = 'block';
     updateScorePill();
+    buildProgressDots();
     showScreen('screen-drill');
     renderStep();
+  }
+
+  function buildProgressDots() {
+    const total = SCENARIOS[scenario].steps.length;
+    const wrap = document.getElementById('progress-steps');
+    wrap.innerHTML = '';
+    for (let i = 0; i < total; i++) {
+      const d = document.createElement('div');
+      d.className = 'prog-dot';
+      d.id = 'pdot-' + i;
+      wrap.appendChild(d);
+    }
+  }
+
+  function updateProgress() {
+    const total = SCENARIOS[scenario].steps.length;
+    const pct = Math.round((stepIndex / total) * 100);
+    document.getElementById('progress-pct').textContent = pct + '%';
+    for (let i = 0; i < total; i++) {
+      const d = document.getElementById('pdot-' + i);
+      d.className = 'prog-dot' + (i < stepIndex ? ' done' : i === stepIndex ? ' current' : '');
+    }
   }
 
   /* ── DRILL ── */
@@ -788,35 +997,30 @@
     const s = SCENARIOS[scenario];
     const step = s.steps[stepIndex];
     const total = s.steps.length;
+    answered = false;
 
+    document.getElementById('step-counter').textContent = String(stepIndex + 1).padStart(2, '0');
     document.getElementById('drill-eyebrow').textContent = s.tag + '  ·  Step ' + (stepIndex + 1) + ' of ' + total;
-    document.getElementById('drill-title').textContent = step.question;
-    document.getElementById('drill-prompt').textContent = s.prompt;
-    document.getElementById('progress-fill').style.width = (stepIndex / total * 100) + '%';
-    document.getElementById('progress-label').textContent = stepIndex + ' / ' + total + ' done';
+    document.getElementById('drill-question').textContent = step.question;
+    document.getElementById('drill-scenario-prompt').textContent = s.prompt;
     document.getElementById('ls-correct').textContent = correctCount;
     document.getElementById('ls-wrong').textContent = wrongCount;
     document.getElementById('ls-score').textContent = score;
+    updateProgress();
 
-    const feedback = document.getElementById('feedback');
-    feedback.className = 'feedback';
-    feedback.textContent = '';
-
-    const nav = document.getElementById('nav-row');
-    nav.style.display = 'none';
+    const fb = document.getElementById('feedback');
+    fb.className = 'feedback';
+    document.getElementById('nav-row').style.display = 'none';
 
     const list = document.getElementById('options-list');
     list.innerHTML = '';
-    answered = false;
-
-    const shuffled = shuffle([...step.options]);
-    shuffled.forEach((opt, i) => {
+    shuffle([...step.options]).forEach((opt, i) => {
       const div = document.createElement('div');
       div.className = 'opt';
       div.setAttribute('tabindex', '0');
-      div.innerHTML = `<div class="opt-dot">${String.fromCharCode(65 + i)}</div><div class="opt-text">${opt.text}</div>`;
+      div.innerHTML = `<div class="opt-badge">${String.fromCharCode(65 + i)}</div><div class="opt-text">${opt.text}</div>`;
       div.onclick = () => chooseOption(opt, div, step);
-      div.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); chooseOption(opt, div, step); } };
+      div.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); chooseOption(opt, div, step); }};
       list.appendChild(div);
     });
   }
@@ -824,56 +1028,48 @@
   function chooseOption(opt, el, step) {
     if (answered) return;
     answered = true;
-
-    const allOpts = document.querySelectorAll('.opt');
-    allOpts.forEach(o => o.classList.add('locked'));
-
-    const feedback = document.getElementById('feedback');
+    document.querySelectorAll('.opt').forEach(o => o.classList.add('locked'));
 
     if (opt.correct) {
       el.classList.add('correct');
-      el.querySelector('.opt-dot').textContent = '✓';
-      score += 10;
-      correctCount++;
-      feedback.textContent = '✓  ' + opt.why;
-      feedback.className = 'feedback visible good';
+      el.querySelector('.opt-badge').textContent = '✓';
+      score += 10; correctCount++;
+      showFeedback('good', '✓', opt.why);
     } else {
       el.classList.add('wrong');
-      el.querySelector('.opt-dot').textContent = '✕';
-      score = Math.max(0, score - 5);
-      wrongCount++;
-      feedback.textContent = '✕  ' + opt.why;
-      feedback.className = 'feedback visible bad';
-      allOpts.forEach(o => {
-        const txt = o.querySelector('.opt-text').textContent;
-        if (txt === step.options.find(s => s.correct).text) {
+      el.querySelector('.opt-badge').textContent = '✕';
+      score = Math.max(0, score - 5); wrongCount++;
+      showFeedback('bad', '✕', opt.why);
+      document.querySelectorAll('.opt').forEach(o => {
+        if (o.querySelector('.opt-text').textContent === step.options.find(s => s.correct).text) {
           o.classList.add('missed');
-          o.querySelector('.opt-dot').textContent = '✓';
+          o.querySelector('.opt-badge').textContent = '✓';
         }
       });
     }
 
     history.push({ text: opt.text, correct: opt.correct, why: opt.why });
-    updateScorePill();
     document.getElementById('ls-correct').textContent = correctCount;
     document.getElementById('ls-wrong').textContent = wrongCount;
     document.getElementById('ls-score').textContent = score;
+    updateScorePill();
 
-    const nav = document.getElementById('nav-row');
-    const btn = document.getElementById('btn-next');
     const isLast = stepIndex === SCENARIOS[scenario].steps.length - 1;
-    btn.textContent = isLast ? 'See results →' : 'Next step →';
-    nav.style.display = 'flex';
+    document.getElementById('btn-next').textContent = isLast ? 'See results →' : 'Next step →';
+    document.getElementById('nav-row').style.display = 'flex';
+  }
+
+  function showFeedback(type, icon, text) {
+    const fb = document.getElementById('feedback');
+    document.getElementById('feedback-icon').textContent = icon;
+    document.getElementById('feedback-text').textContent = text;
+    fb.className = 'feedback visible ' + type;
   }
 
   function nextStep() {
-    const total = SCENARIOS[scenario].steps.length;
     stepIndex++;
-    if (stepIndex >= total) {
-      showResults();
-    } else {
-      renderStep();
-    }
+    if (stepIndex >= SCENARIOS[scenario].steps.length) showResults();
+    else renderStep();
   }
 
   /* ── RESULTS ── */
@@ -882,18 +1078,19 @@
     const total = SCENARIOS[scenario].steps.length;
     const maxScore = total * 10;
     const pct = Math.round((score / maxScore) * 100);
-    const circ = 2 * Math.PI * 44;
+    const circ = 2 * Math.PI * 48;
     const dash = Math.round(circ * Math.max(pct, 0) / 100);
+    const ringColor = pct >= 70 ? '#2D6A4F' : pct >= 40 ? '#B5400A' : '#C94A1A';
 
     document.getElementById('ring-arc').setAttribute('stroke-dasharray', dash + ' 999');
-    document.getElementById('ring-arc').setAttribute('stroke', pct >= 70 ? '#2D6A4F' : pct >= 40 ? '#B5400A' : '#C94A1A');
+    document.getElementById('ring-arc').setAttribute('stroke', ringColor);
     document.getElementById('ring-label').textContent = pct + '%';
 
     let title, sub;
     if (pct === 100) { title = 'Perfect.'; sub = 'Every decision was spot on. You\'re ready for the real thing.'; }
-    else if (pct >= 70) { title = 'Good work.'; sub = 'Solid instincts. Review the wrong ones below so they stick.'; }
-    else if (pct >= 40) { title = 'Keep practicing.'; sub = 'Some gaps to close. Read through the explanations carefully.'; }
-    else { title = 'Let\'s learn.'; sub = 'No stress — that\'s what drills are for. Review each step below.'; }
+    else if (pct >= 70) { title = 'Good work.'; sub = 'Solid instincts. Review the misses below so they stick.'; }
+    else if (pct >= 40) { title = 'Keep going.'; sub = 'Some gaps to close — read through the explanations carefully.'; }
+    else { title = 'Let\'s learn.'; sub = 'That\'s what drills are for. Go through each explanation below.'; }
 
     document.getElementById('result-title').textContent = title;
     document.getElementById('result-sub').textContent = sub;
@@ -906,16 +1103,14 @@
     history.forEach(h => {
       const row = document.createElement('div');
       row.className = 'breakdown-row ' + (h.correct ? 'c' : 'w');
-      row.innerHTML = `<div class="breakdown-dot">${h.correct ? '✓' : '✕'}</div><div>${h.why}</div>`;
+      row.innerHTML = `<div class="bd-dot">${h.correct ? '✓' : '✕'}</div><div>${h.why}</div>`;
       list.appendChild(row);
     });
 
     document.getElementById('tip-text').textContent = SCENARIOS[scenario].tip;
-    document.getElementById('progress-fill').style.width = '100%';
-    document.getElementById('progress-label').textContent = SCENARIOS[scenario].steps.length + ' / ' + SCENARIOS[scenario].steps.length + ' done';
   }
 
-  /* ── HELPERS ── */
+  /* ── UTILS ── */
   function showScreen(id) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById(id).classList.add('active');
